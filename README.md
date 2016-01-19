@@ -81,11 +81,24 @@ Line 6: the same thing for your 'cleaned' R reads if you have paired sequence da
 /nfs1/FW_HMSC/Baker_Lab/bin/GenomeAnalysisTK.jar
 /nfs1/FW_HMSC/Baker_Lab/bin/picard/dist/picard.jar
 paired
-/nfs1/FW_HMSC/Baker_Lab/emma_temp/ddRAD_for_Alana/QC_Phred20_discardN/${name}.1.gq.gz
-/nfs1/FW_HMSC/Baker_Lab/emma_temp/ddRAD_for_Alana/QC_Phred20_discardN/${name}.2.gq.gz
+/nfs1/FW_HMSC/Baker_Lab/emma_temp/ddRAD_for_Alana/QC_Phred20_discardN/${name}.1.fq.gz
+/nfs1/FW_HMSC/Baker_Lab/emma_temp/ddRAD_for_Alana/QC_Phred20_discardN/${name}.2.fq.gz
 ```
 Another example of the pathway to the reads where these are in a folder with the name of the sample:
 ```
 /home/a499a400/Kaloula/cleaned-reads/${name}/split-adapter-quality-trimmed/${name}-READ1.fastq.gz
 /home/a499a400/Kaloula/cleaned-reads/${name}/split-adapter-quality-trimmed/${name}-READ2.fastq.gz
 ```
+
+As well as your phasing_settings file, you'll need a file which lists the samples you are interested in assembling, one on each line. The names given here should match the ${name} given in phasing_settings e.g. 
+```
+MQ23qc
+Eau09AI233qc
+Eau09AI164qc
+PV56sqc
+PV70mqc
+Eau09AI136qc
+PV50mqc
+```
+
+# To do: for each locus for each sample, print out average depth of coverage

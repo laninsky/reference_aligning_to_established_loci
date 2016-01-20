@@ -90,7 +90,7 @@ Another example of the pathway to the reads where these are in a folder with the
 /home/a499a400/Kaloula/cleaned-reads/${name}/split-adapter-quality-trimmed/${name}-READ2.fastq.gz
 ```
 
-As well as your phasing_settings file, you'll need a file which lists the samples you are interested in assembling, one on each line. The names given here should match the ${name} given in phasing_settings e.g. 
+As well as your phasing_settings file, you'll need a file ("samples.txt") which lists the samples you are interested in assembling, one on each line. The names given here should match the ${name} given in phasing_settings e.g. 
 ```
 MQ23qc
 Eau09AI233qc

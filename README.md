@@ -22,7 +22,7 @@ done;
 ```
 
 #Step 2
-For step 2, you need a text file of the samples/species you want to use as references called "ref_samples.txt". For each locus, the "top-ranked" sample (the sample in line 1) will have one of its first allele pulled out and placed into a reference fasta file ("reference.fa"). If the top-ranked sample is not present, the script will check for the next sample and so on.
+For step 2, you need a text file of the samples/species you want to use as references called "ref_samples.txt". For each locus, the "top-ranked" sample (the sample in line 1) will have one of its first allele pulled out and placed into a reference fasta file ("reference.fa"). If the top-ranked sample is not present, the script will check for the next sample and so on (therefore you want to rank the samples from most preferred reference through to least that you put in the ref_samples.txt file).
 
 An example ref_samples.txt file (these samples had numerical codes)
 ```

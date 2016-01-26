@@ -101,4 +101,13 @@ Eau09AI136qc
 PV50mqc
 ```
 
+If you have paired end data, before you run the script for this step, make sure that your F and R files have the same read names in both (i.e. you cannot have a suffix of _1 in the read1 file, and _2 in the read2 file). If they have different names in each file, use sed to rename them e.g.
+```
+for i in `ls *.2.fq.gz`;
+do gunzip $i;
+newname=`echo $i | sed 's/.gz//g'`;
+sed -i 's/_2$/_1/g' $newname;
+gzip $newname;
+done
+```
 # To do: for each locus for each sample, print out average depth of coverage

@@ -21,6 +21,7 @@ fi
 done;
 ```
 
+#Step 2
 For step 2, you need a text file of the samples/species you want to use as references called "ref_samples.txt". For each locus, the "top-ranked" sample (the sample in line 1) will have one of its first allele pulled out and placed into a reference fasta file ("reference.fa"). If the top-ranked sample is not present, the script will check for the next sample and so on.
 
 An example ref_samples.txt file (these samples had numerical codes)
@@ -30,8 +31,7 @@ An example ref_samples.txt file (these samples had numerical codes)
 28427
 ```
 
-#Step 2
-The script expects the first allele for each sample to be named samplename.assembled_0. If you have a different coding system for your alleles, make sure to tweak "samplenamesuffix" in the code below.
+Before you start this script, backup your locus specific fasta files to another folder (e.g. backup_fasta), just in case. The script expects the first allele for each sample to be named samplename.assembled_0. If you have a different coding system for your alleles, make sure to tweak "samplenamesuffix" in the code below.
 ```
 samplenamesuffix=.assembled_0
 
@@ -51,7 +51,7 @@ done
 ```
 
 #Step 3
-This step is going to carry out the reference-guided assembly for your samples. You will need to have bwa, samtools, gatk and picard installed, with bwa and samtools in your path. To install gatk and picard, I did the following:
+If everything went OK with the previous script, and you have a copy of your locus specific fasta files in another location (e.g. backup_fasta), you can delete the locus specific fasta files in this folder (just to make ls etc a little quicker). This step is going to carry out the reference-guided assembly for your samples. You will need to have bwa, samtools, gatk and picard installed, with bwa and samtools in your path. To install gatk and picard, I did the following:
 
 -- installed up to date java (jdk), declared JAVA_HOME in .bashrc, .cshrc etc. Added full path to java to $path/$PATH.
 

@@ -11,6 +11,8 @@ $javapath -jar $picard CreateSequenceDictionary R=reference.fa O=reference.dict
 
 nosamples=`wc -l samples.txt | awk '{print $1}'`
 
+echo "samplename" "locus" "ref_length(bp)" "bp_covered_by_seq" "min_cov" "min_cov_not_0" "max_cov" "mean_inc_0" "mean_exc_0" > coverage_summary.txt
+
 for i in `seq 1 $nosamples`;
 do name=`tail -n+$i samples.txt | head -n1`;
 forward_proto=`tail -n+5 phasing_settings | head -n1`;

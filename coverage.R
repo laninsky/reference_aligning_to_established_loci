@@ -11,7 +11,7 @@ input <- input[-1,]
 loci <- unique(input[,2])
 noloci <- length(loci)
 
-output <- matrix(NA,nrow=noloci,ncol=9)
+output <- matrix(NA,nrow=noloci,ncol=8)
 output[,1] <- name[1,1]
 output[,2] <- loci
 
@@ -20,10 +20,12 @@ coords <- which(input[,2]==output[i,2])
 output[i,3] <- length(coords)
 output[i,4] <- as.numeric(output[i,3]) - sum(as.numeric(input[coords,4])==0)
 output[i,5] <- min(as.numeric(input[coords,4]))
-output[i,6] <- min(as.numeric((input[coords,4])>0))
-output[i,7] <- max(as.numeric(input[coords,4]))
-output[i,8] <- mean(as.numeric(input[coords,4]))
-output[i,9] <- mean(as.numeric((input[coords,4])>0))
+output[i,6] <- max(as.numeric(input[coords,4]))
+output[i,7] <- mean(as.numeric(input[coords,4]))
+if (output[i,6]==0) {
+output[i,8] <- 0 } else { 
+output[i,8] <- mean(as.numeric((input[coords,4])>0))
+}
 }
 
 write.table(output, "coverage_summary.txt",quote=FALSE, col.names=FALSE,row.names=FALSE, append=TRUE)

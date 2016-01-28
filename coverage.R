@@ -24,7 +24,7 @@ output[i,6] <- max(as.numeric(input[coords,4]))
 output[i,7] <- mean(as.numeric(input[coords,4]))
 if (output[i,6]==0) {
 output[i,8] <- 0 } else { 
-output[i,8] <- mean(as.numeric((input[coords,4])>0))
+output[i,8] <- output[i,7]*output[i,3]/output[i,4]
 }
 }
 

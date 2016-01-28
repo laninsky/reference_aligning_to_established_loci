@@ -45,46 +45,43 @@ $javapath -jar $gatk -T HaplotypeCaller -R reference.fa -I temp_realigned_reads.
 $javapath -jar $gatk -T ReadBackedPhasing -R reference.fa -I temp_realigned_reads.bam  --variant temp_raw_variants.vcf -o temp_phased_SNPs.vcf;
 $javapath -jar $gatk -T FastaAlternateReferenceMaker -V temp_phased_SNPs.vcf -R reference.fa -o temp_alt.fa;
 
-
-# need to double check the onelining.R script
 Rscript onelining.R;
 
-rm -rf $name.*;
 mv temp_alt2.fa $name.fa;
 rm -rf temp*;
 
-sed -i 's/\?/N/g' $i;
-sed -i 's/-//g' $i;
-bwa index -a is $i;
-samtools faidx $i;
-java -jar $picard CreateSequenceDictionary R=$i O=$name.dict;
+sed -i 's/\?/N/g' $name.fa;
+sed -i 's/-//g' $name.fa;
+bwa index -a is $name.fa;
+samtools faidx $name.fa;
+java -jar $picard CreateSequenceDictionary R=$name.fa O=$name.dict;
 
 if [ $sequencing == paired ]
 then
-bwa mem $i $forward $reverse > temp.sam;
+bwa mem $name.fa $forward $reverse > temp.sam;
 fi
 
 if [ $sequencing == single ]
 then
-bwa mem $i $forward > temp.sam;
+bwa mem $name.fa $forward > temp.sam;
 fi
 
 java -jar $picard AddOrReplaceReadGroups I=temp.sam O=tempsort.sam SORT_ORDER=coordinate LB=rglib PL=illumina PU=phase SM=everyone;
 java -jar $picard MarkDuplicates MAX_FILE_HANDLES=1000 I=tempsort.sam O=tempsortmarked.sam M=temp.metrics AS=TRUE;
 java -jar $picard SamFormatConverter I=tempsortmarked.sam O=tempsortmarked.bam;
 samtools index tempsortmarked.bam;
-java -jar $gatk -T RealignerTargetCreator -R $i -I tempsortmarked.bam -o tempintervals.list;
-java -jar $gatk -T IndelRealigner -R $i -I  tempsortmarked.bam -targetIntervals tempintervals.list -o temp_realigned_reads.bam;
-java -jar $gatk -T HaplotypeCaller -R $i -I temp_realigned_reads.bam --genotyping_mode DISCOVERY -stand_emit_conf 30 -stand_call_conf 30 -o temp_raw_variants.vcf;
-java -jar $gatk -T ReadBackedPhasing -R $i -I temp_realigned_reads.bam  --variant temp_raw_variants.vcf -o temp_phased_SNPs.vcf;
-java -jar $gatk -T FastaAlternateReferenceMaker -V temp_phased_SNPs.vcf -R $i -o temp_alt.fa;
+java -jar $gatk -T RealignerTargetCreator -R $name.fa -I tempsortmarked.bam -o tempintervals.list;
+java -jar $gatk -T IndelRealigner -R $name.fa -I  tempsortmarked.bam -targetIntervals tempintervals.list -o temp_realigned_reads.bam;
+java -jar $gatk -T HaplotypeCaller -R $name.fa -I temp_realigned_reads.bam --genotyping_mode DISCOVERY -stand_emit_conf 30 -stand_call_conf 30 -o temp_raw_variants.vcf;
+java -jar $gatk -T ReadBackedPhasing -R $name.fa -I temp_realigned_reads.bam  --variant temp_raw_variants.vcf -o temp_phased_SNPs.vcf;
+java -jar $gatk -T FastaAlternateReferenceMaker -V temp_phased_SNPs.vcf -R $name.fa -o temp_alt.fa;
 
 Rscript onelining.R;
 
-mv $i safe.$i.ref.fa
+mv $name.fa safe.$name.fa.ref.fa
 rm -rf $name.*;
 mv temp_alt2.fa $name.1.fa;
-mv safe.$i.ref.fa $name.2.fa
+mv safe.$name.fa.ref.fa $name.2.fa
 rm -rf temp*;
 
 done

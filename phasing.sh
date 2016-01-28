@@ -41,11 +41,12 @@ rm -rf temp.coverage.sample_*
 echo $name > name
 Rscript coverage.R
 
-
 $javapath -jar $gatk -T HaplotypeCaller -R reference.fa -I temp_realigned_reads.bam --genotyping_mode DISCOVERY -stand_emit_conf 30 -stand_call_conf 30 -o temp_raw_variants.vcf;
 $javapath -jar $gatk -T ReadBackedPhasing -R reference.fa -I temp_realigned_reads.bam  --variant temp_raw_variants.vcf -o temp_phased_SNPs.vcf;
 $javapath -jar $gatk -T FastaAlternateReferenceMaker -V temp_phased_SNPs.vcf -R reference.fa -o temp_alt.fa;
 
+
+# need to double check the onelining.R script
 Rscript onelining.R;
 
 rm -rf $name.*;

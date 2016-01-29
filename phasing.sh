@@ -1,17 +1,17 @@
-javapath=`tail -n+1 phasing_settings | head -n1`
-gatk=`tail -n+2 phasing_settings | head -n1`
-picard=`tail -n+3 phasing_settings | head -n1`
-sequencing=`tail -n+4 phasing_settings | head -n1`
+javapath=`tail -n+1 phasing_settings | head -n1`;
+gatk=`tail -n+2 phasing_settings | head -n1`;
+picard=`tail -n+3 phasing_settings | head -n1`;
+sequencing=`tail -n+4 phasing_settings | head -n1`;
 
-sed -i 's/\?/N/g' reference.fa
-sed -i 's/-//g' reference.fa
-bwa index -a is reference.fa
-samtools faidx reference.fa
-$javapath -jar $picard CreateSequenceDictionary R=reference.fa O=reference.dict
+sed -i 's/\?/N/g' reference.fa;
+sed -i 's/-//g' reference.fa;
+bwa index -a is reference.fa;
+samtools faidx reference.fa;
+$javapath -jar $picard CreateSequenceDictionary R=reference.fa O=reference.dict;
 
-nosamples=`wc -l samples.txt | awk '{print $1}'`
+nosamples=`wc -l samples.txt | awk '{print $1}'`;
 
-echo "samplename" "locus" "ref_length(bp)" "bp_covered_by_seq" "min_cov" "max_cov" "mean_inc_0" "mean_exc_0" > coverage_summary.txt
+echo "samplename" "locus" "ref_length(bp)" "bp_covered_by_seq" "min_cov" "max_cov" "mean_inc_0" "mean_exc_0" > coverage_summary.txt;
 
 for i in `seq 1 $nosamples`;
 do name=`tail -n+$i samples.txt | head -n1`;

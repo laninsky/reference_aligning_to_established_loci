@@ -36,10 +36,10 @@ $javapath -jar $picard SamFormatConverter I=tempsortmarked.sam O=tempsortmarked.
 samtools index tempsortmarked.bam;
 $javapath -jar $gatk -T RealignerTargetCreator -R reference.fa -I tempsortmarked.bam -o tempintervals.list;
 $javapath -jar $gatk -T IndelRealigner -R reference.fa -I tempsortmarked.bam -targetIntervals tempintervals.list -o temp_realigned_reads.bam;
-$javapath -jar $gatk -T DepthOfCoverage -R reference.fa -I temp_realigned_reads.bam -o temp.coverage
-rm -rf temp.coverage.sample_*
-echo $name > name
-Rscript coverage.R
+$javapath -jar $gatk -T DepthOfCoverage -R reference.fa -I temp_realigned_reads.bam -o temp.coverage;
+rm -rf temp.coverage.sample_*;
+echo $name > name;
+Rscript coverage.R;
 
 $javapath -jar $gatk -T HaplotypeCaller -R reference.fa -I temp_realigned_reads.bam --genotyping_mode DISCOVERY -stand_emit_conf 30 -stand_call_conf 30 -o temp_raw_variants.vcf;
 $javapath -jar $gatk -T ReadBackedPhasing -R reference.fa -I temp_realigned_reads.bam  --variant temp_raw_variants.vcf -o temp_phased_SNPs.vcf;
@@ -78,10 +78,10 @@ $javapath -jar $gatk -T FastaAlternateReferenceMaker -V temp_phased_SNPs.vcf -R 
 
 Rscript onelining.R;
 
-mv $name.fa safe.$name.fa.ref.fa
+mv $name.fa safe.$name.fa.ref.fa;
 rm -rf $name.*;
 mv temp_alt2.fa $name.1.fa;
-mv safe.$name.fa.ref.fa $name.2.fa
+mv safe.$name.fa.ref.fa $name.2.fa;
 rm -rf temp*;
 
 done

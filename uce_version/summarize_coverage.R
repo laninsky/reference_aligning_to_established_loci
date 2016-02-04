@@ -7,8 +7,8 @@ outtable <- matrix(NA,ncol=3,nrow=noloci)
 outtable[,1] <- locinames[,1]
 
 for (i in 1:noloci) {
-outtable[,2] <- sum(intable[,2]==locinames[i,1])
-outtable[,3] <- mean(as.numeric(intable[(which(intable[,2]==locinames[i,1])),7]))
+outtable[i,2] <- sum(intable[,2]==locinames[i,1])
+outtable[i,3] <- mean(as.numeric(intable[(which(intable[,2]==locinames[i,1])),7]))
 }
 
 write.table(outtable, "locus_coverage_data.txt",quote=FALSE, col.names=FALSE,row.names=FALSE)

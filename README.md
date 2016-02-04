@@ -53,8 +53,6 @@ done
 #Step 3
 If everything went OK with the previous script, and you have a copy of your locus specific fasta files in another location (e.g. backup_fasta), you can delete the locus specific fasta files in this folder (just to make ls etc a little quicker). This step is going to carry out the reference-guided assembly for your samples. You will need to have bwa, samtools, gatk and picard installed, with bwa and samtools in your path. To install gatk and picard, I did the following:
 
--- installed up to date java (jdk), declared JAVA_HOME in .bashrc, .cshrc etc. Added full path to java to $path/$PATH.
-
 -- installed up to date apache ant, declared ANT_HOME. Added full path to ant to $path/$PATH
 
 -- installed htsjdk using apache ant, and then copied directory to picard's folder after installation

@@ -43,18 +43,11 @@ Rscript coverage.R;
 
 $javapath -jar $gatk -T HaplotypeCaller -R reference.fa -I temp_realigned_reads.bam --genotyping_mode DISCOVERY -stand_emit_conf 30 -stand_call_conf 30 -o temp_raw_variants.vcf;
 $javapath -jar $gatk -T ReadBackedPhasing -R reference.fa -I temp_realigned_reads.bam  --variant temp_raw_variants.vcf -o temp_phased_SNPs.vcf;
-
-#### NEED TO ADD NEW SECTION IN HERE WITH FASTA GENERATED FROM THIS SEQUENCE ONLY. GOING TO HAVE TO CREATE A NEW RSCRIPT TO DEAL WITH DISJUNCT INTERVALS
-
-
+$javapath -jar $gatk -T FindCoveredIntervals -R reference.fa -I temp_realigned_reads.bam -cov 1 -o temp_covered.list
+$javapath -jar $gatk -T FastaAlternateReferenceMaker -V temp_phased_SNPs.vcf -R reference.fa -L temp_covered.list -o temp_alt.fa;
 
 
-
-#################################
-
-
-
-$javapath -jar $gatk -T FastaAlternateReferenceMaker -V temp_phased_SNPs.vcf -R reference.fa -o temp_alt.fa;
+#### CHECK NEW OUTPUT IS GOOD TO GO STRAIGHT INTO PIPELINE
 
 Rscript onelining.R;
 

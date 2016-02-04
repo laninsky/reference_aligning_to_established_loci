@@ -34,4 +34,4 @@ for i in `\ls`; do gzip $i/split-adapter-quality-trimmed/*READ2*; done;
 
 4) run the UCE_phasing.sh script in this folder (make sure the coverage.R from the main folder is also in here, and phasing_settings etc has been set up as for the main instructions).
 
-5) Run summarize_coverage.R to obtain a locus-by-locus summary of coverage and sample size
+5) Run summarize_coverage.R to obtain a locus-by-locus summary of coverage and sample size. The output file will give the locus name in the first column, how many samples that locus was present in, and then the average coverage across these samples.

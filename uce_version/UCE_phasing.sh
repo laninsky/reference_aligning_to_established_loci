@@ -40,5 +40,6 @@ $javapath -jar $gatk -T DepthOfCoverage -R reference.fa -I temp_realigned_reads.
 rm -rf temp.coverage.sample_*;
 echo $name > name;
 Rscript coverage.R;
-rm reference.*
+rm reference.*;
+rm temp*;
 done;

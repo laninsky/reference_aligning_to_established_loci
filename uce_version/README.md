@@ -6,7 +6,7 @@ Using the onelining.R code at: https://github.com/laninsky/ambigoos_into_structu
 ```
 for i in `ls *.fa*`; do mv $i temp; Rscript onelining.R; mv tempout $i; done;
 ```
-#2) Get a list of sample names and put them in file called "samplenames.txt" (one name per sample) in the folder with your fasta files. Run the following (cribbed from step 2 of : https://github.com/laninsky/reference_aligning_to_established_loci)
+2) Get a list of sample names and put them in file called "samplenames.txt" (one name per sample) in the folder with your fasta files. Run the following (cribbed from step 2 of : https://github.com/laninsky/reference_aligning_to_established_loci)
 ```
 nosamples=`wc -l samplenames.txt | awk '{print $1}'`;
 

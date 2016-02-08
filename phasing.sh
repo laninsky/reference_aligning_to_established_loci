@@ -46,9 +46,6 @@ $javapath -jar $gatk -T ReadBackedPhasing -R reference.fa -I temp_realigned_read
 $javapath -jar $gatk -T FindCoveredIntervals -R reference.fa -I temp_realigned_reads.bam -cov 1 -o temp_covered.list
 $javapath -jar $gatk -T FastaAlternateReferenceMaker -V temp_phased_SNPs.vcf -R reference.fa -L temp_covered.list -o temp_alt.fa;
 
-
-#### CHECK NEW OUTPUT IS GOOD TO GO STRAIGHT INTO PIPELINE
-
 Rscript onelining.R;
 
 mv temp_alt2.fa $name.fa;

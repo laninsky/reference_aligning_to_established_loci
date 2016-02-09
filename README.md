@@ -108,4 +108,9 @@ sed -i 's/_2$/_1/g' $newname;
 gzip $newname;
 done
 ```
-# To do: for each locus for each sample, print out average depth of coverage
+
+To execute the script, make sure you have your phasing_settings file, samples.txt file, reference.fa file, and the Rscripts (onelining.R and coverage.R) in the directory where you execute the phasing.sh script. You can do this by:
+```
+bash phasing.sh
+```
+

@@ -48,6 +48,7 @@ break;
 fi
 done
 done
+ls *.fasta > fasta_names
 ```
 
 #Step 3

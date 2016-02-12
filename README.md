@@ -48,7 +48,6 @@ break;
 fi
 done
 done
-ls *.fasta > fasta_names
 ```
 
 #Step 3
@@ -115,3 +114,9 @@ To execute the script, make sure you have your phasing_settings file, samples.tx
 bash phasing.sh
 ```
 
+#Step 4
+Summarizing coverage.  These commands will obtain a locus-by-locus summary of coverage and sample size. The output file will give the locus name in the first column, how many samples that locus was present in, and then the average coverage across these samples. Make sure summarize_coverage.R is in the folder with your samplename.1.fa and samplename.2.fa files.
+```
+grep ">" reference.fa | sed 's/>//g' > fasta_names
+Rscript summarize_coverage.R
+```

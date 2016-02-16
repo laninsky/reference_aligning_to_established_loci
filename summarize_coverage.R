@@ -20,7 +20,9 @@ outtable[i,(nosamples+j+3)] <- as.numeric(intable[k,4])/as.numeric(intable[k,3])
 }
 }
 
-titlerow <- c("locus","no_of_samples","av_cov_across_samples",paste(samplenames,"_av_cov",sep=""),paste(samplenames,"prop_locus_covered",sep=""))
+samplenamescov <- paste(samplenames[,1],"_av_cov",sep="")
+samplenamesprop <- paste(samplenames[,1],"_prop_lovus_cov",sep="")
+titlerow <- c("locus","no_of_samples","av_cov_across_samples",samplenamescov,samplenamesprop)
 outtable <- rbind(titlerow,outtable)
 
 write.table(outtable, "locus_coverage_data.txt",quote=FALSE, col.names=FALSE,row.names=FALSE)

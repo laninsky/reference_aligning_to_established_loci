@@ -31,7 +31,7 @@ An example ref_samples.txt file (these samples had numerical codes)
 28427
 ```
 
-Before you start this script, backup your locus specific fasta files to another folder (e.g. backup_fasta), just in case. The script expects the first allele for each sample to be named samplename.assembled_0. If you have a different coding system for your alleles, make sure to tweak "samplenamesuffix" in the code below.
+Before you start this script, backup your locus specific fasta files to another folder (e.g. backup_fasta), just in case. The script expects the first allele for each sample to be named samplename.assembled_0. If you have a different coding system for your alleles, make sure to tweak "samplenamesuffix" in the code below (e.g. changing it to 'unassembled' etc!)
 ```
 samplenamesuffix=.assembled_0
 

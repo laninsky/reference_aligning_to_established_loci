@@ -120,3 +120,35 @@ Summarizing coverage.  These commands will obtain a locus-by-locus summary of co
 grep ">" reference.fa | sed 's/>//g' > fasta_names
 Rscript summarize_coverage.R
 ```
+
+#Step 5
+Combining reference-aligned samples with original fasta files. You'll need to tweak the samplenamesuffix1 and 2 to match what you have in your original fasta files.
+```
+mkdir combined_fasta
+cp backup/*.fasta combined_fasta
+samplenamesuffix1=".assembled_0"
+samplenamesuffix2=".assembled_1"
+
+for i in *.1.fa;
+do samplename=`echo $i | sed 's/.1.fa//g'`;
+second=`echo $i | sed 's/.1.fa/.2.fa/g'`;
+norefs=`wc -l $i | awk '{print $1}'`;
+for j in `seq 1 2 $norefs`;
+do k=$(($j+1));
+locusname=`tail -n+$j $i | head -n1| sed 's/>//g'`;
+echo ">"$samplename$samplenamesuffix1 >> combined_fasta/$locusname; 
+firstseq=`tail -n+$k $i | head -n1`;
+echo $firstseq >> combined_fasta/$locusname; 
+echo ">"$samplename$samplenamesuffix2 >> combined_fasta/$locusname; 
+secondseq=`tail -n+$k $second | head -n1`;
+echo $secondseq >> combined_fasta/$locusname; 
+done;
+done;
+
+
+
+
+
+echo $temp | awk '{print $2}' >> reference.fa;
+break;
+

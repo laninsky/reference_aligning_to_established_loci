@@ -150,5 +150,13 @@ done;
 sort loci_to_align.txt | uniq > uniq_loci_to_align.txt
 rm loci_to_align.txt
 
+nofasta=`wc -l uniq_loci_to_align.txt | awk '{print $1}'`;
+for j in `seq 1 $nofasta`;
+do locusname=`tail -n+$j uniq_loci_to_align.txt | head -n1`;
+mv combined_fasta/$locusname temp;
+mafft temp > combined_fasta/$locusname;
+done;
+
+rm temp
 
 

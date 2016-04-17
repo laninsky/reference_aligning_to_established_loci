@@ -147,3 +147,8 @@ echo $secondseq >> combined_fasta/$locusname;
 done;
 done;
 
+sort loci_to_align.txt | uniq > uniq_loci_to_align.txt
+rm loci_to_align.txt
+
+
+

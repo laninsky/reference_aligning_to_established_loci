@@ -122,7 +122,7 @@ Rscript summarize_coverage.R
 ```
 
 #Step 5
-Combining reference-aligned samples with original fasta files. You'll need to tweak the samplenamesuffix1 and 2 to match what you have in your original fasta files.
+Combining reference-aligned samples with original fasta files. You'll need to tweak the samplenamesuffix1 and 2 to match what you have in your original fasta files (e.g. changing it to unassembled etc)
 ```
 mkdir combined_fasta
 cp backup/*.fasta combined_fasta

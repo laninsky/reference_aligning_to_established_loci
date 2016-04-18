@@ -122,7 +122,7 @@ Rscript summarize_coverage.R
 ```
 
 #Step 5
-Combining reference-aligned samples with original fasta files. You'll need to tweak the samplenamesuffix1 and 2 to match what you have in your original fasta files (e.g. changing it to unassembled etc)
+Combining reference-aligned samples with original fasta files. You'll need to tweak the samplenamesuffix1 and 2 to match what you have in your original fasta files (e.g. changing it to unassembled etc). Then, running MAFFT to re-align the loci in the files, as our reference-aligned loci will have gaps etc stripped.
 ```
 mkdir combined_fasta
 cp backup/*.fasta combined_fasta
@@ -158,5 +158,28 @@ mafft temp > combined_fasta/$locusname;
 done;
 
 rm temp
+```
 
+#STEP 6
+Cleaning up the MAFFT alignments (which wrap text over multiple lines and use lowercase letters). The first sed command is only needed if you have stuffed up the suffixes on Step 5, otherwise you can comment it out.
+```
+nofasta=`wc -l uniq_loci_to_align.txt | awk '{print $1}'`;
+for j in `seq 1 $nofasta`;
+do locusname=`tail -n+$j uniq_loci_to_align.txt | head -n1`;
+sed 's/\.assembled/\.unassembled/g' combined_fasta/$locusname > temp;
+rm combined_fasta/$locusname;
+Rscript mafft_reformat.R;
+mv temp.fa combined_fasta/$locusname;
+rm -rf temp;
+done;
+```
+
+#STEP 7
+Pulling out the SNPs from each locus. Create a species_assignment file following the instructions at: https://github.com/laninsky/pyRAD_alleles_into_structure#species_assignments-file
+
+
+
+```
+for i in combined_fasta/*.fasta;
+do cp $i temp;
 

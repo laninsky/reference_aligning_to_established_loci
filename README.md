@@ -176,10 +176,20 @@ done;
 
 #STEP 7
 Pulling out the SNPs from each locus. Create a species_assignment file following the instructions at: https://github.com/laninsky/pyRAD_alleles_into_structure#species_assignments-file
-
-
+Note, for this species assignment file, do not include suffixes e.g.
+```
+ChecKK058     hectors
+Chem15NZ35    hectors
+ChecKK063     hectors
+28311 rights
+13193 rights
+```
 
 ```
+Rscript creating_frame.R
+
+
 for i in combined_fasta/*.fasta;
 do cp $i temp;
 
+rm temp;

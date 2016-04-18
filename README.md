@@ -122,13 +122,13 @@ Rscript summarize_coverage.R
 ```
 
 #Step 5
-Combining reference-aligned samples with original fasta files. You'll need to tweak the samplenamesuffix1 and 2 to match what you have in your original fasta files (e.g. changing it to unassembled etc). Then, running MAFFT to re-align the loci in the files, as our reference-aligned loci will have gaps etc stripped.
+Combining reference-aligned samples with original fasta files. You'll need to tweak the samplenamesuffix1 and 2 to match what you have in your original fasta files (e.g. changing it between assembled/unassembled etc). Then, running MAFFT to re-align the loci in the files, as our reference-aligned loci will have gaps etc stripped.
 ```
 mkdir combined_fasta
 cp backup/*.fasta combined_fasta
 
-samplenamesuffix1=".assembled_0"
-samplenamesuffix2=".assembled_1"
+samplenamesuffix1=".unassembled_0";
+samplenamesuffix2=".unassembled_1";
 
 for i in *.1.fa;
 do samplename=`echo $i | sed 's/.1.fa//g'`;
@@ -147,8 +147,8 @@ echo $secondseq >> combined_fasta/$locusname;
 done;
 done;
 
-sort loci_to_align.txt | uniq > uniq_loci_to_align.txt
-rm loci_to_align.txt
+sort loci_to_align.txt | uniq > uniq_loci_to_align.txt;
+rm loci_to_align.txt;
 
 nofasta=`wc -l uniq_loci_to_align.txt | awk '{print $1}'`;
 for j in `seq 1 $nofasta`;
@@ -157,7 +157,7 @@ mv combined_fasta/$locusname temp;
 mafft temp > combined_fasta/$locusname;
 done;
 
-rm temp
+rm temp;
 ```
 
 #STEP 6
@@ -187,7 +187,6 @@ ChecKK063     hectors
 
 ```
 Rscript creating_frame.R
-
 
 for i in combined_fasta/*.fasta;
 do cp $i temp;

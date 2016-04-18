@@ -4,9 +4,6 @@ species <- as.matrix(read.table("frame_record.txt",header=FALSE,stringsAsFactors
 
 rows <- dim(intable)[1]
 
-allele_file <- matrix(species[1,3:(individual_no+2)],ncol=1)
-allele_file <- rbind("",allele_file)
-SNP_file <- rbind("",allele_file)
 sp_file <- as.matrix(species[2,-1:-2])
 print(noquote("% progress through file:"))
 
@@ -42,21 +39,18 @@ sites <- array(c(ACMs,AGRs,ATWs,CGSs,CTYs,GTKs))
 sites <- sites[order(sites)]
 no_SNPs <- length(sites)
 
-#### UP TO HERE
-
 if (!(length(sites)==0)) {
 if(length(sites)==1) {
-proto_struct <- cbind(tempfile[,1],(matrix(tempstructure[,sites])))
+proto_struct <- cbind(tempfile[,1],(matrix(tempfile[,sites])))
 } else {
-proto_struct <- cbind(tempfile[,1],tempstructure[,sites])
+proto_struct <- cbind(tempfile[,1],tempfile[,sites])
 }
-rm(tempfile)
-rm(tempstructure)
+
 proto_cols <- dim(proto_struct)[2]
 no_k <- dim(unique(proto_struct[,2:proto_cols]))[1]
 ks <- unique(proto_struct[,2:proto_cols])
 
-tempallelicstructure <- matrix(0,ncol=1,nrow=no_indivs)
+tempallelicstructure <- matrix(0,ncol=1,nrow=(dim(proto_struct)[1]))
 if (is.null(no_k)) {
 no_k <- length(ks)
 for (a in 1:(length(ks))) {
@@ -64,39 +58,43 @@ tempallelicstructure[(unique((which(proto_struct==ks[a],arr.ind=TRUE))[,1])),1] 
 }
 } else {
 for (a in 1:no_k) {
-for (i in 1:no_indivs)
+for (i in 1:(dim(proto_struct)[1]))
 if (isTRUE(all(proto_struct[i,2:proto_cols]==ks[a,1:(dim(ks)[2])]))) {
 tempallelicstructure[i,1] <- a
 }
 }
 }
 
-tempSNPs <- matrix(0,ncol=no_SNPs,nrow=(individuals_no*2))
-tempalleles <- matrix(0,ncol=1,nrow=(individuals_no*2))
+tempSNPs <- matrix(0,nrow=no_SNPs,ncol=(dim(species)[2]))
+tempalleles <- matrix(0,nrow=1,ncol=(dim(species)[2]))
 
 i <- 1
-while (i  <= no_indivs) {
-for (k in 1:(individuals_no*2)) {
-if ((length(grep(SNP_file[(k+2),1],proto_struct[i,1])))>0) {
-tempSNPs[k,] <- proto_struct[i,2:(no_SNPs+1)]
-tempSNPs[(k+1),] <- proto_struct[(i+1),2:(no_SNPs+1)]
-tempalleles[k,] <- tempallelicstructure[i,]
-tempalleles[(k+1),] <- tempallelicstructure[(i+1),]
+while (i  <= (dim(proto_struct)[1])) {
+for (k in 1:((dim(species)[2])-2)) {
+if ((length(grep(species[1,(k+2)],proto_struct[i,1])))>0) {
+tempSNPs[,k] <- t(proto_struct[i,2:(no_SNPs+1)])
+tempSNPs[,(k+1)] <- t(proto_struct[(i+1),2:(no_SNPs+1)])
+tempalleles[,k] <- t(tempallelicstructure[i,])
+tempalleles[,(k+1)] <- t(tempallelicstructure[(i+1),])
 break
 }
 }
 i <- i+2
 }
 
+uniquespecies <- unique(species[2,3:(dim(species)[2])])
 unique_sp_array <- matrix("",nrow=(length(uniquespecies)),ncol=4)
 
 for (i in 1:(length(uniquespecies))) {
-sp_specific_allele <- tempalleles[(which(sp_file[,1]==uniquespecies[i])),1]
-sp_specific_SNP <- tempSNPs[(which(sp_file[,1]==uniquespecies[i])),1]
+sp_specific_allele <- tempalleles[1,(which(sp_file[,1]==uniquespecies[i]))]
+sp_specific_SNP <- tempSNPs[1,(which(sp_file[,1]==uniquespecies[i]))]
 
 unique_sp_array[i,1] <- (sum(sp_specific_allele!=0))/2
 unique_sp_array[i,2] <- length(unique(sp_specific_allele[which(sp_specific_allele!=0)]))
 unique_sp_array[i,3] <- length(unique(sp_specific_allele[which(sp_specific_allele!=0)]))-1
+
+
+############UP TO HERE
 
 if(unique_sp_array[i,3]<0) {
 unique_sp_array[i,3] <- 0
@@ -128,7 +126,6 @@ sites <- rbind(locus_count,sites)
 tempSNPs <- rbind(sites,tempSNPs)
 tempalleles <- rbind(locus_count,tempalleles)
 
-allele_file <- cbind(allele_file,tempalleles)
 SNP_file <- cbind(SNP_file,tempSNPs)
 
 } else {

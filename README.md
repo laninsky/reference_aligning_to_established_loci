@@ -161,12 +161,13 @@ rm temp;
 ```
 
 #STEP 6
-Cleaning up the MAFFT alignments (which wrap text over multiple lines and use lowercase letters). The first sed command is only needed if you have stuffed up the suffixes on Step 5, otherwise you can comment it out.
+Cleaning up the MAFFT alignments (which wrap text over multiple lines and use lowercase letters). The first sed command is only needed if you have stuffed up the suffixes on Step 5, otherwise you can comment it out and use the cp line instead (if you do need to correct the suffixes, make sure to comment out the cp line instead).
 ```
 nofasta=`wc -l uniq_loci_to_align.txt | awk '{print $1}'`;
 for j in `seq 1 $nofasta`;
 do locusname=`tail -n+$j uniq_loci_to_align.txt | head -n1`;
-sed 's/\.assembled/\.unassembled/g' combined_fasta/$locusname > temp;
+#sed 's/\.assembled/\.unassembled/g' combined_fasta/$locusname > temp;
+cp combined_fasta/$locusname temp;
 rm combined_fasta/$locusname;
 Rscript mafft_reformat.R;
 mv temp.fa combined_fasta/$locusname;

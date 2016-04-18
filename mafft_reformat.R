@@ -22,6 +22,9 @@ sequencepaste <- toupper(sequencepaste)
 }
 }
 
+to_write <- rbind(to_write,tempname)
+to_write <- rbind(to_write,sequencepaste)
+
 write.table(to_write, "temp.fa",quote=FALSE, col.names=FALSE,row.names=FALSE)
 
 q()

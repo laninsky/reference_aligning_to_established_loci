@@ -1,68 +1,48 @@
 library(stringr)
-intable <- read.table("temp",header=FALSE,stringsAsFactors=FALSE,sep="\t")
-species <- read.table("species_assignments",header=FALSE,stringsAsFactors=FALSE,sep="")
+intable <- as.matrix(read.table("temp",header=FALSE,stringsAsFactors=FALSE,sep="\t"))
+species <- as.matrix(read.table("frame_record.txt",header=FALSE,stringsAsFactors=FALSE,sep=""))
 
 rows <- dim(intable)[1]
-individuals_no <- dim(species)[1]
-uniquespecies <- unique(species[,2])
-n_uniquespecies <- paste("n_",uniquespecies,sep="")
-k_uniquespecies <- paste("k_",uniquespecies,sep="")
-SNPs_uniquespecies <- paste("SNPs_",uniquespecies,sep="")
-H_uniquespecies <-  paste("H_",uniquespecies,sep="")
-ordered_samples <- species[,1]
-ordered_samples <- ordered_samples[order(ordered_samples)]
 
-locus_summary <- c("locus_ID","bp","n_total",n_uniquespecies, "k_total",k_uniquespecies,"SNPs_total",SNPs_uniquespecies,"H_total",H_uniquespecies,ordered_samples)
-
-allele_file <- matrix(c(species[,1],species[,1]),ncol=1)
-allele_file <- matrix(allele_file[order(allele_file[,1]),])
+allele_file <- matrix(species[1,3:(individual_no+2)],ncol=1)
 allele_file <- rbind("",allele_file)
 SNP_file <- rbind("",allele_file)
-sp_file <- matrix(c(species[,1],species[,1],species[,2],species[,2]),ncol=2)
-sp_file <- matrix(sp_file[order(sp_file[,1]),],ncol=2)
-sp_file <- matrix(sp_file[,2],ncol=1)
-
-locus_count <- 1
-tempfile <- NULL
-
+sp_file <- as.matrix(species[2,-1:-2])
 print(noquote("% progress through file:"))
 
-for (j in 1:rows) {
-progress_update <- c(1.0000,5.0000,10.0000,15.0000,20.0000,25.0000,30.0000,35.0000,40.0000,45.0000,50.0000,55.0000,60.0000,65.0000,70.0000,75.0000,80.0000,85.0000,90.0000)
-if((round((j/rows*100),4)) %in% progress_update) {
-print(noquote((round((j/rows*100),5))))
-flush.console()
+seqlength <- nchar(intable[2,1])
+
+tempfile <- matrix(NA,ncol=(seqlength+1),nrow=((dim(intable)[1])/2))
+
+for (j in seq(1,rows,2)) {
+tempfile[((j+1)/2),1] <- gsub(">","",intable[j,1])
+tempfile[((j+1)/2),2:(seqlength+1)] <- unlist(strsplit(intable[(j+1),1],""))
 }
 
-if ((length(grep("//",intable[j,1])))>0) {
-tempfile <- tempfile[order(tempfile[,1]),]
-seqlength <- nchar(tempfile[1,2])
-tempseq <- unlist(strsplit(tempfile[(1:(dim(tempfile)[1])),2],""))
-tempstructure <- t(matrix(tempseq,nrow=seqlength,ncol=(dim(tempfile)[1])))
-no_indivs <- (dim(tempfile)[1])
+As <- colSums(tempfile=="A")
+Cs <- colSums(tempfile=="C")
+Gs <- colSums(tempfile=="G")
+Ts <- colSums(tempfile=="T")
+Ms <- colSums(tempfile=="M")
+Rs <- colSums(tempfile=="R")
+Ws <- colSums(tempfile=="W")
+Ss <- colSums(tempfile=="S")
+Ys <- colSums(tempfile=="Y")
+Ks <- colSums(tempfile=="K")
+Ns <- colSums(tempfile=="N") + colSums(tempfile=="-")
 
-As <- colSums(tempstructure=="A")
-Cs <- colSums(tempstructure=="C")
-Gs <- colSums(tempstructure=="G")
-Ts <- colSums(tempstructure=="T")
-Ms <- colSums(tempstructure=="M")
-Rs <- colSums(tempstructure=="R")
-Ws <- colSums(tempstructure=="W")
-Ss <- colSums(tempstructure=="S")
-Ys <- colSums(tempstructure=="Y")
-Ks <- colSums(tempstructure=="K")
-Ns <- colSums(tempstructure=="N") + colSums(tempstructure=="-")
-
-ACMs <- which(((As > 0 & Cs > 0) | (As > 0 & Ms > 0) | (Cs > 0 & Ms > 0)) & Gs == 0 & Ts == 0 & Rs == 0 & Ws == 0 & Ss == 0 & Ys == 0 & Ks == 0 & Ns < no_indivs, arr.ind=TRUE)
-AGRs <- which(((As > 0 & Gs > 0) | (As > 0 & Rs > 0) | (Gs > 0 & Rs > 0)) & Cs == 0 & Ts == 0 & Ms == 0 & Ws == 0 & Ss == 0 & Ys == 0 & Ks == 0 & Ns < no_indivs, arr.ind=TRUE)
-ATWs <- which(((As > 0 & Ts > 0) | (As > 0 & Ws > 0) | (Ts > 0 & Ws > 0)) & Cs == 0 & Gs == 0 & Ms == 0 & Rs == 0 & Ss == 0 & Ys == 0 & Ks == 0 & Ns < no_indivs, arr.ind=TRUE)
-CGSs <- which(((Cs > 0 & Gs > 0) | (Cs > 0 & Ss > 0) | (Gs > 0 & Ss > 0)) & As == 0 & Ts == 0 & Rs == 0 & Ws == 0 & Ms == 0 & Ys == 0 & Ks == 0 & Ns < no_indivs, arr.ind=TRUE)
-CTYs <- which(((Cs > 0 & Ts > 0) | (Cs > 0 & Ys > 0) | (Ts > 0 & Ys > 0)) & As == 0 & Gs == 0 & Rs == 0 & Ws == 0 & Ms == 0 & Ss == 0 & Ks == 0 & Ns < no_indivs, arr.ind=TRUE)
-GTKs <- which(((Gs > 0 & Ts > 0) | (Gs > 0 & Ks > 0) | (Ts > 0 & Ks > 0)) & As == 0 & Cs == 0 & Rs == 0 & Ws == 0 & Ms == 0 & Ss == 0 & Ys == 0 & Ns < no_indivs, arr.ind=TRUE)
+ACMs <- which(((As > 0 & Cs > 0) | (As > 0 & Ms > 0) | (Cs > 0 & Ms > 0)) & Gs == 0 & Ts == 0 & Rs == 0 & Ws == 0 & Ss == 0 & Ys == 0 & Ks == 0 & Ns < ((dim(intable)[1])/2), arr.ind=TRUE)
+AGRs <- which(((As > 0 & Gs > 0) | (As > 0 & Rs > 0) | (Gs > 0 & Rs > 0)) & Cs == 0 & Ts == 0 & Ms == 0 & Ws == 0 & Ss == 0 & Ys == 0 & Ks == 0 & Ns < ((dim(intable)[1])/2), arr.ind=TRUE)
+ATWs <- which(((As > 0 & Ts > 0) | (As > 0 & Ws > 0) | (Ts > 0 & Ws > 0)) & Cs == 0 & Gs == 0 & Ms == 0 & Rs == 0 & Ss == 0 & Ys == 0 & Ks == 0 & Ns < ((dim(intable)[1])/2), arr.ind=TRUE)
+CGSs <- which(((Cs > 0 & Gs > 0) | (Cs > 0 & Ss > 0) | (Gs > 0 & Ss > 0)) & As == 0 & Ts == 0 & Rs == 0 & Ws == 0 & Ms == 0 & Ys == 0 & Ks == 0 & Ns < ((dim(intable)[1])/2), arr.ind=TRUE)
+CTYs <- which(((Cs > 0 & Ts > 0) | (Cs > 0 & Ys > 0) | (Ts > 0 & Ys > 0)) & As == 0 & Gs == 0 & Rs == 0 & Ws == 0 & Ms == 0 & Ss == 0 & Ks == 0 & Ns < ((dim(intable)[1])/2), arr.ind=TRUE)
+GTKs <- which(((Gs > 0 & Ts > 0) | (Gs > 0 & Ks > 0) | (Ts > 0 & Ks > 0)) & As == 0 & Cs == 0 & Rs == 0 & Ws == 0 & Ms == 0 & Ss == 0 & Ys == 0 & Ns < ((dim(intable)[1])/2), arr.ind=TRUE)
 
 sites <- array(c(ACMs,AGRs,ATWs,CGSs,CTYs,GTKs))
 sites <- sites[order(sites)]
 no_SNPs <- length(sites)
+
+#### UP TO HERE
 
 if (!(length(sites)==0)) {
 if(length(sites)==1) {
@@ -194,22 +174,9 @@ tempfile <- rbind(tempfile,tempcombine)
 }
 }
 
-write.table(locus_summary, "locus_summary.txt",quote=FALSE, col.names=FALSE,row.names=FALSE)
+write.table(locus_summary, "locus_summary.txt",quote=FALSE, col.names=FALSE,row.names=FALSE, append=TRUE)
 rm(locus_summary)
 rm(intable)
-
-write.table(allele_file, "full_allele_record.txt",quote=FALSE, col.names=FALSE,row.names=FALSE)
-
-allele_file <- allele_file[2:(dim(allele_file)[1]),]
-
-write.table(allele_file, "allele.txt",quote=FALSE, col.names=FALSE,row.names=FALSE)
-
-print("allele.txt has the following number of taxa:")
-print(((dim(allele_file)[1])/2))
-print("allele.txt has the following number of loci:")
-print((dim(allele_file)[2])-1)
-
-rm(allele_file)
 
 SNP_file[SNP_file == "A"] <- 1
 SNP_file[SNP_file == "C"] <- 2

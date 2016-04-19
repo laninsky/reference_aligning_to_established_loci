@@ -1,6 +1,7 @@
 library(stringr)
-intable <- as.matrix(read.table("temp1",header=FALSE,stringsAsFactors=FALSE,sep="\t"))
+intable <- as.matrix(read.table("temp",header=FALSE,stringsAsFactors=FALSE,sep="\t"))
 species <- as.matrix(read.table("frame_record.txt",header=FALSE,stringsAsFactors=FALSE,sep=""))
+name <- as.matrix(read.table("name.txt",header=FALSE,stringsAsFactors=FALSE,sep=""))
 
 rows <- dim(intable)[1]
 
@@ -121,14 +122,18 @@ ind_array[(indcount[i])/2] <- 1
 }
 }
 
-#### NEED TO READ IN NAME
-templocussummary <- c(locus_count,seqlength,(no_indivs/2),unique_sp_array[,1], no_k,unique_sp_array[,2],no_SNPs,unique_sp_array[,3],H_total,unique_sp_array[,4],ind_array)
+templocussummary <- c(name,seqlength,(sum(ind_array==1)),unique_sp_array[,1], no_k,unique_sp_array[,2],no_SNPs,unique_sp_array[,3],H_total,unique_sp_array[,4],ind_array)
 
-sites <- rbind(locus_count,sites)
-tempSNPs <- rbind(sites,tempSNPs)
-tempalleles <- rbind(locus_count,tempalleles)
+sitesmat <- matrix(ncol=2,nrow=length(sites))
+sitesmat[,1] <- name
+sitesmat[,2] <- sites
+tempSNPs <- cbind(sitesmat,tempSNPs)
+tempalleles <- cbind(name,tempalleles)
 
-SNP_file <- cbind(SNP_file,tempSNPs)
+write.table(SNP_file, "full_SNP_record.txt",quote=FALSE, col.names=FALSE,row.names=FALSE)
+
+#PUT SNP FILE CALCULATIONS IN HERE
+
 
 } else {
 zeroarray <- cbind(as.matrix(species),0)
@@ -160,52 +165,6 @@ templocussummary <- c(locus_count,seqlength,(no_indivs/2),zeronumbers,1,onezeroe
 
 }
 
-locus_summary <- rbind(locus_summary,templocussummary)
+write.table(templocussummary, "locus_summary.txt",quote=FALSE, col.names=FALSE,row.names=FALSE, append=TRUE)
 
-tempfile <- NULL
-locus_count <- locus_count + 1
-
-} else {
-tempname <- unlist(strsplit(intable[j,1],"[[:blank:]]+",fixed=FALSE))[1]
-tempDNAseq <- unlist(strsplit(intable[j,1],"[[:blank:]]+",fixed=FALSE))[2]
-tempcombine <- cbind(tempname,tempDNAseq)
-tempfile <- rbind(tempfile,tempcombine)
-}
-}
-
-write.table(locus_summary, "locus_summary.txt",quote=FALSE, col.names=FALSE,row.names=FALSE, append=TRUE)
-rm(locus_summary)
-rm(intable)
-
-SNP_file[SNP_file == "A"] <- 1
-SNP_file[SNP_file == "C"] <- 2
-SNP_file[SNP_file == "G"] <- 3
-SNP_file[SNP_file == "T"] <- 4
-SNP_file[SNP_file == "N"] <- 0
-SNP_file[SNP_file == "-"] <- 0
-
-write.table(SNP_file, "full_SNP_record.txt",quote=FALSE, col.names=FALSE,row.names=FALSE)
-
-loci <- unique(SNP_file[1,])
-noloci <- length(loci)
-high_grade <- SNP_file[,1]
-
-for (j in 2:(noloci)) {
-temp_high_grade <- (SNP_file[,(SNP_file[1,]==loci[j])])
-if (is.vector(temp_high_grade)) {
-temp_high_grade <- matrix(temp_high_grade)
-high_grade <- cbind(high_grade,temp_high_grade)
-} else {
-high_grade <- cbind(high_grade,temp_high_grade[,(which.min(t(matrix(colSums(temp_high_grade[3:(individuals_no*2+2),(temp_high_grade[1,]==loci[j])]==0)))))])
-}
-}
-
-final_structure <- high_grade[3:(individuals_no*2+2),]
-
-write.table(high_grade, "structure_with_double_header.txt",quote=FALSE, col.names=FALSE,row.names=FALSE)
-write.table(final_structure, "structure.txt",quote=FALSE, col.names=FALSE,row.names=FALSE)
-
-print("structure.txt has the following number of taxa:")
-print(individuals_no)
-print("structure.txt has the following number of loci:")
-print((dim(final_structure)[2])-1)
+q()

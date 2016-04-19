@@ -1,5 +1,5 @@
 library(stringr)
-intable <- as.matrix(read.table("temp",header=FALSE,stringsAsFactors=FALSE,sep="\t"))
+intable <- as.matrix(read.table("temp1",header=FALSE,stringsAsFactors=FALSE,sep="\t"))
 species <- as.matrix(read.table("frame_record.txt",header=FALSE,stringsAsFactors=FALSE,sep=""))
 
 rows <- dim(intable)[1]
@@ -65,8 +65,8 @@ tempallelicstructure[i,1] <- a
 }
 }
 
-tempSNPs <- matrix(0,nrow=no_SNPs,ncol=(dim(species)[2]))
-tempalleles <- matrix(0,nrow=1,ncol=(dim(species)[2]))
+tempSNPs <- matrix(0,nrow=no_SNPs,ncol=(dim(species)[2]-2))
+tempalleles <- matrix(0,nrow=1,ncol=(dim(species)[2]-2))
 
 i <- 1
 while (i  <= (dim(proto_struct)[1])) {
@@ -92,9 +92,6 @@ sp_specific_SNP <- tempSNPs[1,(which(sp_file[,1]==uniquespecies[i]))]
 unique_sp_array[i,1] <- (sum(sp_specific_allele!=0))/2
 unique_sp_array[i,2] <- length(unique(sp_specific_allele[which(sp_specific_allele!=0)]))
 unique_sp_array[i,3] <- length(unique(sp_specific_allele[which(sp_specific_allele!=0)]))-1
-
-
-############UP TO HERE
 
 if(unique_sp_array[i,3]<0) {
 unique_sp_array[i,3] <- 0

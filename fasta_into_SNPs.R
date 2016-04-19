@@ -1,5 +1,5 @@
 library(stringr)
-intable <- as.matrix(read.table("temp1",header=FALSE,stringsAsFactors=FALSE,sep="\t"))
+intable <- as.matrix(read.table("temp",header=FALSE,stringsAsFactors=FALSE,sep="\t"))
 species <- as.matrix(read.table("frame_record.txt",header=FALSE,stringsAsFactors=FALSE,sep=""))
 name <- as.matrix(read.table("name.txt",header=FALSE,stringsAsFactors=FALSE,sep=""))
 
@@ -39,6 +39,7 @@ GTKs <- which(((Gs > 0 & Ts > 0) | (Gs > 0 & Ks > 0) | (Ts > 0 & Ks > 0)) & As =
 sites <- array(c(ACMs,AGRs,ATWs,CGSs,CTYs,GTKs))
 sites <- sites[order(sites)]
 no_SNPs <- length(sites)
+uniquespecies <- unique(species[2,3:(dim(species)[2])])
 
 if (!(length(sites)==0)) {
 if(length(sites)==1) {
@@ -83,7 +84,6 @@ break
 i <- i+2
 }
 
-uniquespecies <- unique(species[2,3:(dim(species)[2])])
 unique_sp_array <- matrix("",nrow=(length(uniquespecies)),ncol=4)
 
 for (i in 1:(length(uniquespecies))) {
@@ -122,7 +122,7 @@ ind_array[(indcount[i])/2] <- 1
 }
 }
 
-templocussummary <- c(name,seqlength,(sum(ind_array==1)),unique_sp_array[,1], no_k,unique_sp_array[,2],no_SNPs,unique_sp_array[,3],H_total,unique_sp_array[,4],ind_array)
+templocussummary <- t(as.matrix(c(name,seqlength,(sum(ind_array==1)),unique_sp_array[,1], no_k,unique_sp_array[,2],no_SNPs,unique_sp_array[,3],H_total,unique_sp_array[,4],ind_array)))
 
 sitesmat <- matrix(ncol=2,nrow=length(sites))
 sitesmat[,1] <- name
@@ -133,26 +133,24 @@ tempalleles <- cbind(name,tempalleles)
 write.table(tempSNPs, "full_SNP_record.txt",quote=FALSE, col.names=FALSE,row.names=FALSE,append=TRUE)
 write.table(tempalleles, "allele_record.txt",quote=FALSE, col.names=FALSE,row.names=FALSE,append=TRUE)
 
-#PUT SNP FILE CALCULATIONS IN HERE
-
-
 } else {
-zeroarray <- cbind(as.matrix(species),0)
-zeroarray <- zeroarray[order(zeroarray[,1]),]
+zeroarray <- rbind(as.matrix(species),0)
 
-for (k in 1:(individuals_no)) {
+for (k in 3:(dim(zeroarray)[2])) {
 for (i in 1:(dim(tempfile)[1])) {
-if ((length(grep(zeroarray[k,1],tempfile[i,1])))>0) {
-zeroarray[k,3] <- 1
+if ((length(grep(zeroarray[1,k],tempfile[i,1])))>0) {
+zeroarray[3,k] <- 1
 }
 }
 }
+
+zeroarray <- zeroarray[,-(seq(1,dim(zeroarray)[2],2))]
 
 zeronumbers <- rep(0,(length(uniquespecies)))
 zeroforadding <- zeronumbers
 
 for (i in 1:(length(uniquespecies))) {
-zeronumbers[i] <- sum(as.numeric(zeroarray[(which(zeroarray[,2]==uniquespecies[i])),3]))
+zeronumbers[i] <- sum(as.numeric(zeroarray[3,(which(zeroarray[2,]==uniquespecies[i]))]))
 }
 
 onezeroes <- rep(0,(length(uniquespecies)))
@@ -162,7 +160,7 @@ onezeroes[i] <- 1
 }
 }
 
-templocussummary <- c(locus_count,seqlength,(no_indivs/2),zeronumbers,1,onezeroes,0,zeroforadding,0,zeroforadding,zeroarray[,3])
+templocussummary <- t(as.matrix(c(name,seqlength,(sum(zeroarray[3,]==1)),zeronumbers,1,onezeroes,0,zeroforadding,0,zeroforadding,zeroarray[3,2:(dim(zeroarray)[2])])))
 
 }
 

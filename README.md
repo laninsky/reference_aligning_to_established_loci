@@ -185,12 +185,21 @@ ChecKK063     hectors
 28311 rights
 13193 rights
 ```
-
+Then run the following code
 ```
-Rscript creating_frame.R
+Rscript creating_frame.R;
 
 for i in combined_fasta/*.fasta;
 do cp $i temp;
 echo $i > name.txt;
-
+Rscript fasta_into_SNPs.R;
 rm temp;
+done;
+```
+The output will be as follows:
+
+-- locus_summary.txt: a tab-delimited file with locus name, length of locus, number of samples with data for locus, number of samples within each species (defined in your species_assignment) folder, total number of alleles found across your samples, total number of alleles found within each species, total number of bi-allelic SNPs variable across all samples, total number of bi-allelic SNPs observed to be variable within a species, total proportion of heterozygotes in sample, total proportion of heterozygotes within each species, and finally whether sequence is present (1) or absent (0) for each of your samples. For the calculations of numbers of alleles, SNPs and heterozygosity, only samples where data is present are used.
+
+-- full_SNP_record.txt: a tab-delimited file with locus name, position of SNP within locus, and nucleotide base observed at each allele for each sample (therefore sample name given twice). Missing data or gaps in alignment denoted as zero. This file will be the input for further downstream processing of the data to produce a structure file. Samples are grouped by species as defined in your species_assignment file.
+
+-- allele_record.txt: a tab-delimited file with locus name, and haplotype combination across bi-allelic SNPs for each allele for each sample (therefore sample name given twice. Haplotype names arbritrarily numbered starting at 1). Missing data denoted as zero. This file will be the input for further downstream processing of the data to produce a structure file. Samples are grouped by species as defined in your species_assignment file.

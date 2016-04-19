@@ -1,5 +1,5 @@
 library(stringr)
-intable <- as.matrix(read.table("temp",header=FALSE,stringsAsFactors=FALSE,sep="\t"))
+intable <- as.matrix(read.table("temp1",header=FALSE,stringsAsFactors=FALSE,sep="\t"))
 species <- as.matrix(read.table("frame_record.txt",header=FALSE,stringsAsFactors=FALSE,sep=""))
 name <- as.matrix(read.table("name.txt",header=FALSE,stringsAsFactors=FALSE,sep=""))
 
@@ -130,7 +130,8 @@ sitesmat[,2] <- sites
 tempSNPs <- cbind(sitesmat,tempSNPs)
 tempalleles <- cbind(name,tempalleles)
 
-write.table(SNP_file, "full_SNP_record.txt",quote=FALSE, col.names=FALSE,row.names=FALSE)
+write.table(tempSNPs, "full_SNP_record.txt",quote=FALSE, col.names=FALSE,row.names=FALSE,append=TRUE)
+write.table(tempalleles, "allele_record.txt",quote=FALSE, col.names=FALSE,row.names=FALSE,append=TRUE)
 
 #PUT SNP FILE CALCULATIONS IN HERE
 

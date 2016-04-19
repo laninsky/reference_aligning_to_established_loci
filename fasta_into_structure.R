@@ -89,8 +89,11 @@ for (i in 1:(length(uniquespecies))) {
 sp_specific_allele <- tempalleles[1,(which(sp_file[,1]==uniquespecies[i]))]
 sp_specific_SNP <- tempSNPs[1,(which(sp_file[,1]==uniquespecies[i]))]
 
+#no_of_indivs
 unique_sp_array[i,1] <- (sum(sp_specific_allele!=0))/2
+#no_of_alleles
 unique_sp_array[i,2] <- length(unique(sp_specific_allele[which(sp_specific_allele!=0)]))
+#no_of_spp_specific_alleles
 unique_sp_array[i,3] <- length(unique(sp_specific_allele[which(sp_specific_allele!=0)]))-1
 
 if(unique_sp_array[i,3]<0) {
@@ -109,14 +112,16 @@ unique_sp_array[i,4] <- 0
 
 H_total <- sum(as.numeric(unique_sp_array[,4])*as.numeric(unique_sp_array[,1]))/sum(as.numeric(unique_sp_array[,1]))
 
-ind_array <- rep(0,(individuals_no))
-indcount <- seq(2,(individuals_no*2),2)
+#Putting in a 1 if an individual has data
+ind_array <- rep(0,((dim(species)[2]-2)/2))
+indcount <- seq(2,(dim(species)[2]-2),2)
 for (i in 1:length(indcount)) {
-if(!((tempalleles[(indcount[i]),1])==0)) {
+if(!((tempalleles[1,(indcount[i])])==0)) {
 ind_array[(indcount[i])/2] <- 1
 }
 }
 
+#### NEED TO READ IN NAME
 templocussummary <- c(locus_count,seqlength,(no_indivs/2),unique_sp_array[,1], no_k,unique_sp_array[,2],no_SNPs,unique_sp_array[,3],H_total,unique_sp_array[,4],ind_array)
 
 sites <- rbind(locus_count,sites)

@@ -6,7 +6,6 @@ name <- as.matrix(read.table("name.txt",header=FALSE,stringsAsFactors=FALSE,sep=
 rows <- dim(intable)[1]
 
 sp_file <- as.matrix(species[2,-1:-2])
-print(noquote("% progress through file:"))
 
 seqlength <- nchar(intable[2,1])
 

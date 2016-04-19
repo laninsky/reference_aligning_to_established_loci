@@ -191,5 +191,6 @@ Rscript creating_frame.R
 
 for i in combined_fasta/*.fasta;
 do cp $i temp;
+echo $i > name.txt;
 
 rm temp;

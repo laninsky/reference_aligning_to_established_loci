@@ -1,6 +1,6 @@
 #Reference_aligning_to_established_loci
 
-Starting with the *.alleles file produced by pyRAD, (1) produces one file per locus containing all the alleles present for each sample at that locus; (2) pulls one allele from each locus file for the species/samples you are interested in to act as a reference and stores these in a single fasta file; (3) carries out a reference-based alignment using bwa, gatk, samtools and picard using these reference loci; (4) combines these alleles for your new samples with the previous samples from step #2; (5) generates a summary of the data and SNP files for downstream use using code similar to that found in: https://github.com/laninsky/pyRAD_alleles_into_structure
+Starting with the *.alleles file produced by pyRAD, (1) produces one fasta file per locus containing all the alleles present for each sample at that locus; (2) pulls one allele from each locus file for the species/samples you are interested in to act as a reference and stores these in a single fasta file; (3) carries out a reference-based alignment using bwa, gatk, samtools and picard using these reference loci; (4) generates a summary of the data and SNP files for downstream use using code similar to that found in: https://github.com/laninsky/pyRAD_alleles_into_structure; (5) combines these alleles for your new samples with the previous samples from step #2; (6) aligns the alleles for your new samples with your previous samples using MAFFT; (7) pulls out the SNPs from each locus for each of your fasta files; (8) filters these SNPs by lineages you require to be present/missing data to just one SNP per locus; and finally (9) (optional) further filters the SNPs for your reference-aligned samples to meet a minimum depth requirement.
 
 #Step 1
 Make sure to modify your allelefilename to what your allele file is actually called.
@@ -114,8 +114,10 @@ To execute the script, make sure you have your phasing_settings file, samples.tx
 bash phasing.sh
 ```
 
+Output will include a {samplename}*.1.fa and {samplename}*.2.fa file for each of the samples you listed in samples.txt (containing the first and second allele for each locus, respectively), and a file giving the coverage per sample for each locus ("coverage_summary.txt"). The coverage file will be input into Step 4 to summarize over all the samples.
+
 #Step 4
-Summarizing coverage.  These commands will obtain a locus-by-locus summary of coverage and sample size. The output file will give the locus name in the first column, how many samples that locus was present in, and then the average coverage across these samples. Make sure summarize_coverage.R is in the folder with your samplename.1.fa and samplename.2.fa files.
+Summarizing coverage.  These commands will obtain a locus-by-locus summary of coverage and sample size. The output file ("locus_coverage_data.txt") will give the locus name in the first column, how many samples that locus was present in, and then the average coverage across these samples. Make sure summarize_coverage.R is in the folder with your samplename.1.fa and samplename.2.fa files.
 ```
 grep ">" reference.fa | sed 's/>//g' > fasta_names
 Rscript summarize_coverage.R
@@ -213,3 +215,32 @@ NPrights
 NArights
 ```
 If you want, you can change up the species_assignment file before running this step to reassign species.
+
+To run step 8:
+```
+Rscript SNPs_to_structure.R;
+```
+
+If you don't care about the coverage of the loci from the samples that you referenced map, you can leave it here (you should have set the cut-off for your loci that came from pyRAD, through pyRAD), otherwise proceed to Step 9. There will be two output files from Step 8:
+
+-- full_SNP_record_step8.txt: same columns etc as 'full_SNP_record.txt' but constrained just to one SNP per locus following filtering for lineage.txt, missing.txt and overall missing data
+
+-- structure_step8.txt: a file containing the same loci listed in full_SNP_record_step8.txt formatted for structure. If you'd like to further filter for missing data, follow https://github.com/laninsky/ambigoos_into_structure#what-if-you-want-to-tweak-the-individuals-in-the-filechange-completeness-of-datasetsnp-selection-criteria
+
+#STEP 9
+If you would like to filter for sequencing depth in your reference-aligned samples, you'll need a file with the sequencing depth cut-off you would like to use, named mindepth.txt. In this file, there should just be a single number, the read depth you require for a locus to be included e.g. for 30x sequencing depth
+```
+30
+```
+Any of your reference-aligned samples that do not meet this sequencing depth requirement will have their base calls changed to '0'. This step will then run through your lineage.txt file again (if you made one) to make sure all the SNPs still have data for at least one individual for each of the lineages you define here. The other files required for this step are:
+
+-- samples.txt (from Step 3)
+
+-- full_SNP_record_step8.txt (from Step 8)
+
+-- coverage_summary.txt (output from Step 3)
+
+To run this step:
+```
+Rscript filter_for_depth.R
+```

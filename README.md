@@ -240,6 +240,8 @@ Any of your reference-aligned samples that do not meet this sequencing depth req
 
 -- coverage_summary.txt (output from Step 3)
 
+-- frame_record.txt (from Step 8)
+
 To run this step:
 ```
 Rscript filter_for_depth.R

@@ -31,7 +31,7 @@ An example ref_samples.txt file (these samples had numerical codes)
 28427
 ```
 
-Before you start this script, backup your locus specific fasta files to another folder (e.g. backup_fasta), just in case. The script expects the first allele for each sample to be named samplename.assembled_0. If you have a different coding system for your alleles, make sure to tweak "samplenamesuffix" in the code below (e.g. changing it to 'unassembled' etc!)
+Before you start this script, backup your locus specific fasta files to another folder (call it backup/*.fasta because we'll reference this in a few steps time), just in case. The script expects the first allele for each sample to be named samplename.assembled_0. If you have a different coding system for your alleles, make sure to tweak "samplenamesuffix" in the code below (e.g. changing it to 'unassembled' etc!)
 ```
 samplenamesuffix=.assembled_0
 
@@ -51,7 +51,7 @@ done
 ```
 
 #Step 3
-If everything went OK with the previous script, and you have a copy of your locus specific fasta files in another location (e.g. backup_fasta), you can delete the locus specific fasta files in this folder (just to make ls etc a little quicker). This step is going to carry out the reference-guided assembly for your samples. You will need to have bwa, samtools, gatk and picard installed, with bwa and samtools in your path. To install gatk and picard, I did the following:
+If everything went OK with the previous script, and you have a copy of your locus specific fasta files in another location (call it backup/*.fasta because we'll use this further down), you can delete the locus specific fasta files in this folder (just to make ls etc a little quicker). This step is going to carry out the reference-guided assembly for your samples. You will need to have bwa, samtools, gatk and picard installed, with bwa and samtools in your path. To install gatk and picard, I did the following:
 
 -- installed up to date apache ant, declared ANT_HOME. Added full path to ant to $path/$PATH
 

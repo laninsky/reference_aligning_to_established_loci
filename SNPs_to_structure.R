@@ -33,7 +33,7 @@ rows <- matrix(NA,nrow=(dim(intable)[1]),ncol=1)
 for (j in 1:dim(intable)[1]) {
 rows[j] <- sum(intable[j,cols]==0)
 }
-toselect <- which(rows<2)
+toselect <- which(rows<(length(cols)-1))
 intable <- intable[toselect,]
 }
 }

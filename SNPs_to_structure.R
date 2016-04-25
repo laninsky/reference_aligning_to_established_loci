@@ -29,4 +29,5 @@ if("lineage.txt" %in% listoffiles) {
 lineages <- as.matrix(read.table("lineage.txt",header=FALSE,stringsAsFactors=FALSE,sep="\t"))
 for (i in 1:(dim(lineages)[2])) {
 cols <- which(species[2,]==lineages[i,1])
+# get the coordinates for rows which exceed the allowed missing data per lineage
 rows <- which(rowsum(as.numeric(intable[,cols])==0)

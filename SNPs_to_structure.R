@@ -10,7 +10,6 @@ spassignment <- rbind(c("locus","locus"),spassignment)
 spassignment <- t(spassignment)
 write.table(spassignment, "frame_record.txt",quote=FALSE, col.names=FALSE,row.names=FALSE)
 rm(names)
-rm(spassignment)
 rm(species)
 
 intable <- as.matrix(read.table("full_SNP_record.txt",header=FALSE,stringsAsFactors=FALSE))
@@ -81,6 +80,8 @@ toselect <- c(toselect,subset[whichsubset])
 }
 
 intable <- intable[toselect,]
+
+intable[1,] <- spassignment[1,]
 
 write.table(intable, "full_SNP_record_step8.txt",quote=FALSE, col.names=FALSE,row.names=FALSE, append=TRUE)
 

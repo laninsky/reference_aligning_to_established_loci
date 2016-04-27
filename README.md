@@ -214,7 +214,7 @@ So now you have all the SNPs for all the loci, it is time to filter these down a
 NPrights
 NArights
 ```
-If you want, you can change up the species_assignment file before running this step to reassign species.
+If you want to change up the species_asignment file, you'll need to go back and run Step 7 again.
 
 To run step 8:
 ```

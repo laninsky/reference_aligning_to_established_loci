@@ -69,7 +69,7 @@ toselect <- c(toselect,subset[whichsubset])
 
 intable <- intable[toselect,]
 
-intable[1,] <- spassignment[1,]
+intable[1,] <- species[1,]
 
 write.table(intable, "full_SNP_record_step8.txt",quote=FALSE, col.names=FALSE,row.names=FALSE, append=TRUE)
 

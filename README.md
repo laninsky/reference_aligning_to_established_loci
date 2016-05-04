@@ -178,8 +178,8 @@ done;
 ```
 
 #STEP 7
-Pulling out the SNPs from each locus. Create a species_assignment file following the instructions at: https://github.com/laninsky/pyRAD_alleles_into_structure#species_assignments-file
-Note, for this species assignment file, do not include suffixes e.g.
+Pulling out the SNPs from each locus. Create a species_assignments file following the instructions at: https://github.com/laninsky/pyRAD_alleles_into_structure#species_assignments-file
+Note, for this species assignments file, do not include suffixes e.g.
 ```
 ChecKK058     hectors
 Chem15NZ35    hectors
@@ -246,3 +246,25 @@ To run this step:
 ```
 Rscript filter_for_depth.R
 ```
+
+If you are happy with the samples in your "ingroup" that you've defined the SNPs over, then you are done!
+
+#STEP 10
+If you would like to pare down the samples that your SNPs are defined over (say, you have multiple different species, and you are interested in defining SNPs just over one of those species), you'll want to move all your files from STEP 7 onwards into a backup folder. From that folder, you'll want to copy out full_SNP_record.txt and frame_record.txt. To define the lineages that you want to focus on, you'll need a file called species_filtering.txt. In this file, you'll list the species (corresponding to your species_assignments file) that you would like to restrict the SNP dataset to, e.g.
+```
+NArights
+NPrights
+SHrights
+```
+Then run this step by:
+```
+mv full_SNP_record.txt tempfull_SNP_record.txt
+mv frame_record.txt tempframe_record.txt
+mv species_assignments tempspecies_assignments
+Rscript filter_for_species.R
+rm tempfull_SNP_record.txt
+rm tempframe_record.txt
+rm tempspecies_assignments
+```
+
+The script will modify your full_SNP_record.txt, frame_record.txt and species_assignment files to only include the taxa of interest. You will then need to run Steps 7-9 again to get your final structure file.

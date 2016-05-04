@@ -265,4 +265,4 @@ rm tempfull_SNP_record.txt
 rm tempframe_record.txt
 ```
 
-The script will modify your full_SNP_record.txt and frame_record.txt files to only include the taxa of interest. You will then need to run Steps 7-9 again to get your final structure file. Make sure to modify your missing.txt and lineage.txt files for these steps if you have removed taxa that used to be in them.
+The script will modify your full_SNP_record.txt and frame_record.txt files to only include the taxa of interest. You will then need to run Steps 8-9 again to get your final structure file. Make sure to modify your missing.txt and lineage.txt files for these steps if you have removed taxa that used to be in them.

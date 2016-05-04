@@ -260,11 +260,9 @@ Then run this step by:
 ```
 mv full_SNP_record.txt tempfull_SNP_record.txt
 mv frame_record.txt tempframe_record.txt
-mv species_assignments tempspecies_assignments
 Rscript filter_for_species.R
 rm tempfull_SNP_record.txt
 rm tempframe_record.txt
-rm tempspecies_assignments
 ```
 
-The script will modify your full_SNP_record.txt, frame_record.txt and species_assignment files to only include the taxa of interest. You will then need to run Steps 7-9 again to get your final structure file.
+The script will modify your full_SNP_record.txt and frame_record.txt files to only include the taxa of interest. You will then need to run Steps 7-9 again to get your final structure file. Make sure to modify your missing.txt and lineage.txt files for these steps if you have removed taxa that used to be in them.

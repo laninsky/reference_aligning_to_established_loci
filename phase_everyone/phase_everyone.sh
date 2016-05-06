@@ -40,6 +40,53 @@ $javapath -jar $gatk -T DepthOfCoverage -R reference.fa -I temp_realigned_reads.
 rm -rf temp.coverage.sample_*;
 echo $name > name;
 Rscript coverage.R;
-rm reference.*;
-rm temp*;
-done;
+
+$javapath -jar $gatk -T HaplotypeCaller -R reference.fa -I temp_realigned_reads.bam --genotyping_mode DISCOVERY -stand_emit_conf 30 -stand_call_conf 30 -o temp_raw_variants.vcf;
+$javapath -jar $gatk -T ReadBackedPhasing -R reference.fa -I temp_realigned_reads.bam  --variant temp_raw_variants.vcf -o temp_phased_SNPs.vcf;
+$javapath -jar $gatk -T FindCoveredIntervals -R reference.fa -I temp_realigned_reads.bam -cov 1 -o temp_covered.list
+$javapath -jar $gatk -T FastaAlternateReferenceMaker -V temp_phased_SNPs.vcf -R reference.fa -L temp_covered.list -o temp_alt.fa;
+
+Rscript onelining.R;
+
+mv temp_alt2.fa $name.fa;
+rm -rf temp*;
+
+sed -i 's/\?/N/g' $name.fa;
+sed -i 's/-//g' $name.fa;
+bwa index -a is $name.fa;
+samtools faidx $name.fa;
+$javapath -jar $picard CreateSequenceDictionary R=$name.fa O=$name.dict;
+
+if [ $sequencing == paired ]
+then
+bwa mem $name.fa $forward $reverse > temp.sam;
+fi
+
+if [ $sequencing == single ]
+then
+bwa mem $name.fa $forward > temp.sam;
+fi
+
+$javapath -jar $picard AddOrReplaceReadGroups I=temp.sam O=tempsort.sam SORT_ORDER=coordinate LB=rglib PL=illumina PU=phase SM=everyone;
+$javapath -jar $picard MarkDuplicates MAX_FILE_HANDLES=1000 I=tempsort.sam O=tempsortmarked.sam M=temp.metrics AS=TRUE;
+$javapath -jar $picard SamFormatConverter I=tempsortmarked.sam O=tempsortmarked.bam;
+samtools index tempsortmarked.bam;
+$javapath -jar $gatk -T RealignerTargetCreator -R $name.fa -I tempsortmarked.bam -o tempintervals.list;
+$javapath -jar $gatk -T IndelRealigner -R $name.fa -I  tempsortmarked.bam -targetIntervals tempintervals.list -o temp_realigned_reads.bam;
+$javapath -jar $gatk -T HaplotypeCaller -R $name.fa -I temp_realigned_reads.bam --genotyping_mode DISCOVERY -stand_emit_conf 30 -stand_call_conf 30 -o temp_raw_variants.vcf;
+$javapath -jar $gatk -T ReadBackedPhasing -R $name.fa -I temp_realigned_reads.bam  --variant temp_raw_variants.vcf -o temp_phased_SNPs.vcf;
+$javapath -jar $gatk -T FastaAlternateReferenceMaker -V temp_phased_SNPs.vcf -R $name.fa -o temp_alt.fa;
+
+Rscript onelining.R;
+
+mv $name.fa safe.$name.fa.ref.fa;
+rm -rf $name.*;
+mv temp_alt2.fa $name.1.fa;
+mv safe.$name.fa.ref.fa $name.2.fa;
+rm -rf temp*;
+rm -rf reference.*;
+done
+
+for i in `ls *1.fa`;
+do sed -i 's/-//g' $i;
+done

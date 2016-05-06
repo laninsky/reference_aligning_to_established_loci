@@ -2,6 +2,8 @@
 
 Starting with the *.alleles file produced by pyRAD, (1) produces one fasta file per locus containing all the alleles present for each sample at that locus; (2) pulls one allele from each locus file for the species/samples you are interested in to act as a reference and stores these in a single fasta file; (3) carries out a reference-based alignment using bwa, gatk, samtools and picard using these reference loci; (4) generates a summary of the data and SNP files for downstream use using code similar to that found in: https://github.com/laninsky/pyRAD_alleles_into_structure; (5) combines these alleles for your new samples with the previous samples from step #2; (6) aligns the alleles for your new samples with your previous samples using MAFFT; (7) pulls out the SNPs from each locus for each of your fasta files; (8) filters these SNPs by lineages you require to be present/missing data to just one SNP per locus; and finally (9) (optional) further filters the SNPs for your reference-aligned samples to meet a minimum depth requirement.
 
+The UCE_version folder is a little different in that it assumes you are reference-aligning samples to their own reference (e.g. aligning reads from Sample_A to loci derived from Sample_A in order to phase them).
+
 #Step 1
 Make sure to modify your allelefilename to what your allele file is actually called.
 ```
@@ -22,7 +24,7 @@ done;
 ```
 
 #Step 2
-For step 2, you need a text file of the samples/species you want to use as references called "ref_samples.txt". For each locus, the "top-ranked" sample (the sample in line 1) will have one of its first allele pulled out and placed into a reference fasta file ("reference.fa"). If the top-ranked sample is not present, the script will check for the next sample and so on (therefore you want to rank the samples from most preferred reference through to least that you put in the ref_samples.txt file).
+For step 2, you need a text file of the samples/species you want to use as references called "ref_samples.txt". For each locus, the "top-ranked" sample (the sample in line 1) will have one of its first allele pulled out and placed into a reference fasta file ("reference.fa"). If the top-ranked sample is not present, the script will check for the next sample and so on (therefore you want to rank the samples from most preferred reference through to least that you put in the ref_samples.txt file). If the samples you want to reference align require different references (e.g. they are different species), it would be better to run steps 2-4 separately for each sample.
 
 An example ref_samples.txt file (these samples had numerical codes)
 ```
@@ -124,11 +126,15 @@ Rscript summarize_coverage.R
 ```
 
 #Step 5
-Combining reference-aligned samples with original fasta files. You'll need to tweak the samplenamesuffix1 and 2 to match what you have in your original fasta files (e.g. changing it between assembled/unassembled etc). Then, running MAFFT to re-align the loci in the files, as our reference-aligned loci will have gaps etc stripped.
+Combining reference-aligned samples with original fasta files. If you are combining your data with previously phased data (e.g. fasta files created from a previous *.alleles pyRAD file etc) you'll need to tweak the samplenamesuffix1 and 2 to match what you have in your original fasta files (e.g. changing it between assembled/unassembled etc). Otherwise, if you are rejoining here from the UCE pipepine and have phased every individual in your dataset, then you can change these suffixes to whatever you like (you should also make the combined_fasta directory, but leave it blank as it will be populated by fasta from your samples).
+
+After this step, MAFFT is run to re-align the loci in the files, as our reference-aligned loci will have gaps etc stripped.
 ```
 mkdir combined_fasta
+### This step should NOT be performed for UCE pipeline samples where you've phased everyone ###
 cp backup/*.fasta combined_fasta
 
+### Tweak these suffixes if desired
 samplenamesuffix1=".unassembled_0";
 samplenamesuffix2=".unassembled_1";
 

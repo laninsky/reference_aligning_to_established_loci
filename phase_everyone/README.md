@@ -1,10 +1,11 @@
 The following instructions were originally designed for phasing samples and getting the coverage of UCEs from the phyluce pipeline. They are a little tweaked from the main instructions, but the coverage.R file and phasing_settings file should be the same as in the main instructions, and being familiar with the main instructions would be a good idea. These can be adapted to any source of loci as long as you have a separate fasta file for each locus, with each sample present a maximum of once (i.e. not broken down by alleles). If you are coming from pyRAD, you can use the scripts in helper_scripts to get your fasta files together from the *.loci file.
 
-1) After converting the 75% incomplete dataset (WITHOUT designators inserted for missing taxa) into fasta (separate file per locus, maximum one sequence per sample e.g. not phased alleles) using the convert formats tool from phyluce, get rid of line breaks in fasta with the onelining.R code at: https://github.com/laninsky/ambigoos_into_structure/blob/master/onelining.R
+1) After converting the incomplete UCE dataset (following gblocks etc etc) into fasta (separate file per locus, maximum one sequence per sample e.g. not phased alleles) using the convert formats tool from phyluce, get rid of line breaks in the fasta files with the onelining.R code at: https://github.com/laninsky/ambigoos_into_structure/blob/master/onelining.R
 ```
 for i in `ls *.fa*`; do mv $i temp; Rscript onelining.R; mv tempout $i; done;
+rm temp
 ```
-2) Get a list of sample names and put them in file called "samplenames.txt" (one name per line) in the folder with a copy of your fasta files. Run the following (modified from step 2 of : https://github.com/laninsky/reference_aligning_to_established_loci). This will also give us a list of the loci which we can use in step 4.
+2) Get a list of sample names and put them in file called "samplenames.txt" (one name per line - make sure there are no blank lines at the end of the file) in the folder with a copy of your fasta files. Run the following (modified from step 2 of : https://github.com/laninsky/reference_aligning_to_established_loci). This will also give us a list of the loci which we can use in step 4 (excluding loci for samples which are made up of nothing but missing data).
 ```
 nosamples=`wc -l samplenames.txt | awk '{print $1}'`;
 
@@ -12,16 +13,18 @@ for i in `seq 1 $nosamples`;
 do refname=`tail -n+$i samplenames.txt | head -n1`;
 mkdir $refname;
 for j in `ls *.fasta`;
-do if grep --quiet $refname $j
+do temp=`grep -A1 $refname $j`
+echo $temp | awk '{print $2}' > temp
+if grep --quiet [^\?] temp;
 then echo ">"$j >> $refname/reference.fa;
-temp=`grep -A1 $refname $j`;
-echo $temp | awk '{print $2}' >> $refname/reference.fa;
-fi
+cat temp >> $refname/reference.fa;
+fi;
 done;
 done;
 ls *.fasta > fasta_names
+rm temp
 ```
-The *.fasta files for each locus (but not reference.fa files) can theb be removed.
+The *.fasta files for each locus (but not reference.fa files) can then be removed.
 
 3) Make sure the F and R reads are named the same within the READ1 and READ2 files within the cleaned reads folder - you only have to do this step if the reads have been prefaced with a 1: in the READ1 folder and a 2: in the READ2 folder (running this from inside the cleaned reads folder):
 ```

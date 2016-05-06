@@ -33,7 +33,7 @@ for i in `\ls`; do sed -i 's/ 2:/ 1:/g' $i/split-adapter-quality-trimmed/*READ2*
 for i in `\ls`; do gzip $i/split-adapter-quality-trimmed/*READ2*; done;
 ```
 
-4) Run the phase_everyone.sh script in this folder (make sure the coverage.R from the main folder is also in here, and phasing_settings etc has been set up as for the main instructions).
+4) Back in the folder where you have your subfolders consisting of each of your samples (each containing a reference.fa file): run the phase_everyone.sh script in this folder (make sure the coverage.R from the main folder is also in here, and phasing_settings etc has been set up as for the main instructions).
 
 5) Run summarize_coverage.R from the main folder to obtain a locus-by-locus summary of coverage and sample size. The output file will give the locus name in the first column, how many samples that locus was present in, and then the average coverage across these samples. Rejoin the main set of scripts, resuming at step 5, at:
 https://github.com/laninsky/reference_aligning_to_established_loci

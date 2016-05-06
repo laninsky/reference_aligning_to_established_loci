@@ -8,12 +8,13 @@ What you'll need in your folder:
 -- the converting_pyrad.R script
 
 To convert the file run the following command:
-
+```
 for i in `ls *.loci`;
 do mv $i temp;
 Rscript converting_pyrad.R;
 mv temp $i
 done;
+```
 Then you are ready to copy the other scripts you need for the phasing_everyone step to this folder
 
 Version history

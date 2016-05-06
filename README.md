@@ -183,7 +183,7 @@ rm -rf temp;
 done;
 ```
 
-If your downstream analyses (e.g. https://github.com/laninsky/Phase_hybrid_from_next_gen) involve using *.fasta files rather than SNPs, when you are done! Otherwise proceed to Step 7.
+If your downstream analyses (e.g. https://github.com/laninsky/Phase_hybrid_from_next_gen) involve using *.fasta files rather than SNPs, then you are done with this repository! Otherwise proceed to Step 7.
 
 #STEP 7
 Pulling out the SNPs from each locus. Create a species_assignments file following the instructions at: https://github.com/laninsky/pyRAD_alleles_into_structure#species_assignments-file

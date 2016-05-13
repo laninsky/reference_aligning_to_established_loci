@@ -40,5 +40,10 @@ bash phasing_everyone.sh
 
 5) Run summarize_coverage.R from the main folder to obtain a locus-by-locus summary of coverage and sample size. The output file will give the locus name in the first column, how many samples that locus was present in, and then the average coverage across these samples. Rejoin the main set of scripts, resuming at step 5, at:
 https://github.com/laninsky/reference_aligning_to_established_loci
+```
+sed -i 's/-//g' fasta_names
+mv samplenames.txt samples.txt
+Rscript summarize_coverage.R
+```
 
-Follow any instructions for UCE-related points.
+Follow any instructions for UCE-related points in the main scripts.

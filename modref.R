@@ -35,6 +35,8 @@ uniquelocinames <- unique(locinames)
 
 to_write_final <- matrix(NA,ncol=1,nrow=(length(uniquelocinames)*2))
 
+if(length(dupllocinames)>0) {
+
 for (i in 1:length(dupllocinames)) {
 tempsequence <- NULL
 for (j in (seq(1,(dim(to_write)[1]),2))) {
@@ -54,6 +56,9 @@ to_write_final[i,1] <- to_write[j,1]
 to_write_final[(i+1),1] <- to_write[(j+1),1]
 i <- i+2
 }
+}
+} else {
+to_write_final <- to_write
 }
 
 write.table(to_write_final, "temp_alt2.fa",quote=FALSE, col.names=FALSE,row.names=FALSE)

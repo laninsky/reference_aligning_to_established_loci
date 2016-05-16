@@ -38,7 +38,7 @@ for i in `\ls`; do gzip $i/split-adapter-quality-trimmed/*READ2*; done;
 bash phasing_everyone.sh
 ```
 
-5) Run summarize_coverage.R from the main folder to obtain a locus-by-locus summary of coverage and sample size. The output file will give the locus name in the first column, how many samples that locus was present in, and then the average coverage across these samples. Rejoin the main set of scripts, resuming at step 5, at:
+5) Run summarize_coverage.R from the main repository to obtain a locus-by-locus summary of coverage and sample size. The output file will give the locus name in the first column, how many samples that locus was present in, and then the average coverage across these samples. Rejoin the main set of scripts, resuming at step 5, at:
 https://github.com/laninsky/reference_aligning_to_established_loci
 ```
 sed -i 's/-//g' fasta_names

@@ -63,7 +63,7 @@ If everything went OK with the previous script, and you have a copy of your locu
 
 -- unzipped the gatk binary
 
-You will also need to set up a 'phasing_settings' file as per https://github.com/laninsky/phase_everyone#phasing_settings-file-example. Briefly, on each separate line, in this order, you will need:
+You will also need to set up a 'phasing_settings' file. On each separate line, in this order, you will need:
 
 Line 1: path to your up-to-data jdk/bin/java. If your default 'java' command is pointing to the right version, you can just put in java on this line (I have had trouble with $JAVA_HOME on systems where the native shell is not bash)
 
@@ -76,6 +76,8 @@ Line 4: paired or single, depending on your sequencing method
 Line 5: the pathway to your 'cleaned' F reads (or just your cleaned reads if single end). Substitute "${name}" for the actual sample name wherever this occurs in the pathway to the reads. This program expects the to the reads to be standard across your samples, so you will need to rename them if this is not the case
 
 Line 6: the same thing for your 'cleaned' R reads if you have paired sequence data
+
+e.g.
 ```
 /nfs1/FW_HMSC/Baker_Lab/bin/jdk1.8.0_72/bin/java
 /nfs1/FW_HMSC/Baker_Lab/bin/GenomeAnalysisTK.jar
@@ -111,7 +113,7 @@ gzip $newname;
 done
 ```
 
-To execute the script, make sure you have your phasing_settings file, samples.txt file, reference.fa file, and the Rscripts (onelining.R and coverage.R) in the directory where you execute the phasing.sh script. You can do this by:
+To execute the script, make sure you have your phasing_settings file, samples.txt file, reference.fa file, and the Rscripts (modref.R and coverage.R) in the directory where you execute the phasing.sh script. You can do this by:
 ```
 bash phasing.sh
 ```

@@ -43,7 +43,7 @@ Rscript coverage.R;
 
 $javapath -jar $gatk -T HaplotypeCaller -R reference.fa -I temp_realigned_reads.bam --genotyping_mode DISCOVERY -stand_emit_conf 30 -stand_call_conf 30 -o temp_raw_variants.vcf;
 $javapath -jar $gatk -T ReadBackedPhasing -R reference.fa -I temp_realigned_reads.bam  --variant temp_raw_variants.vcf -o temp_phased_SNPs.vcf;
-$javapath -jar $gatk -T FindCoveredIntervals -R reference.fa -I temp_realigned_reads.bam -cov 1 -o temp_covered.list
+$javapath -jar $gatk -T FindCoveredIntervals -R reference.fa -I temp_realigned_reads.bam -cov 1 -o temp_covered.list;
 $javapath -jar $gatk -T FastaAlternateReferenceMaker -V temp_phased_SNPs.vcf -R reference.fa -L temp_covered.list -o temp_alt.fa;
 
 Rscript modref.R;
@@ -75,7 +75,7 @@ $javapath -jar $gatk -T RealignerTargetCreator -R $name.fa -I tempsortmarked.bam
 $javapath -jar $gatk -T IndelRealigner -R $name.fa -I  tempsortmarked.bam -targetIntervals tempintervals.list -o temp_realigned_reads.bam;
 $javapath -jar $gatk -T HaplotypeCaller -R $name.fa -I temp_realigned_reads.bam --genotyping_mode DISCOVERY -stand_emit_conf 30 -stand_call_conf 30 -o temp_raw_variants.vcf;
 $javapath -jar $gatk -T ReadBackedPhasing -R $name.fa -I temp_realigned_reads.bam  --variant temp_raw_variants.vcf -o temp_phased_SNPs.vcf;
-$javapath -jar $gatk -T FindCoveredIntervals -R $name.fa -I temp_realigned_reads.bam -cov 1 -o temp_covered.list
+$javapath -jar $gatk -T FindCoveredIntervals -R $name.fa -I temp_realigned_reads.bam -cov 1 -o temp_covered.list;
 $javapath -jar $gatk -T FastaAlternateReferenceMaker -V temp_phased_SNPs.vcf -R $name.fa -o temp_alt.fa;
 
 Rscript modref.R;

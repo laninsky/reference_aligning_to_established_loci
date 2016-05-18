@@ -1,16 +1,18 @@
 library(stringr)
 intable <- read.table("temp_alt.fa",header=FALSE,stringsAsFactors=FALSE,sep="\t")
-origref <- read.table("temp_covered.list",header=FALSE,stringsAsFactors=FALSE,sep=":")
 
-loci <- matrix((paste(">",origref[,1],sep="")),ncol=1)
+loci <- intable[(which(grepl(">",intable[,1])==TRUE)),1]
+for (i in 1:(length(loci))) {
+loci[i] <- paste(">",(unlist(strsplit((unlist(strsplit(loci[i]," "))[2]),":"))[1]),sep="")
+}
 
 rows <- dim(intable)[1]
 
-tablelength <- dim(loci)[1]*2
+tablelength <- length(loci)*2
 
 to_write <- matrix(NA,ncol=1,nrow=tablelength)
 
-to_write[1,1] <- loci[1,1]
+to_write[1,1] <- loci[1]
 to_write_title <- 2
 sequencepaste <- NULL
 
@@ -19,7 +21,7 @@ if ((length(grep(">",intable[j,1])))>0) {
 to_write_seq <- to_write_title
 to_write_title <- to_write_title + 1
 to_write[to_write_seq,1] <- sequencepaste
-to_write[to_write_title,1] <- paste(loci[(1+(to_write_title/2)),1],sep="")
+to_write[to_write_title,1] <- paste(loci[(1+(to_write_title/2))],sep="")
 to_write_title <- to_write_title + 1
 sequencepaste <- NULL
 } else {

@@ -276,3 +276,8 @@ rm tempframe_record.txt
 ```
 
 The script will modify your full_SNP_record.txt and frame_record.txt files to only include the taxa of interest. You will then need to run Steps 8-9 again to get your final structure file. Make sure to modify your samples.txt, missing.txt and lineage.txt files for these steps if you have removed taxa that used to be in them.
+
+After defining the SNPs over your ingroups of interest you can then add your outgroups back in by running the following Rscript. You'll need your original full_SNP_record.txt (containing all of the samples) and the full_SNP_record_step9[...] file corresponding to your filtered ingroups SNPs of choice (if you haven't filtered for minimum depth, then just rename your full_SNP_record_step8.txt file to full_SNP_record_step9.txt). Put these in a folder with the Rscript and execute by:
+```
+Rscript insertingoutgroups.R
+```

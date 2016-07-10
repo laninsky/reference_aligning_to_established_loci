@@ -283,10 +283,13 @@ Rscript insertingoutgroups.R
 ```
 
 #STEP 11
-If you want to filter down for an amount of missing data in your final file, you'll need a file called 'proportion.txt' with a single number: the proportion of missing data you wish to allow e.g.
+If you want to filter down for an amount of missing data in your final file, you'll need a file called 'proportion.txt' with a number - the proportion of missing data you wish to allow - on the first line. On the second line, whether you would like the input structure file that is modified to be one that followed step8 or step9 e.g.
 ```
 0.2
+step8
 ```
+All you need in the folder is your structurefile_step8.txt or structurefile_step9.txt, proportion.txt and the Rscript, completeness.R.
+
 Then run:
 ```
 Rscript completeness.R

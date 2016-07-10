@@ -281,3 +281,13 @@ After defining the SNPs over your ingroups of interest you can then add your out
 ```
 Rscript insertingoutgroups.R
 ```
+
+#STEP 11
+If you want to filter down for an amount of missing data in your final file, you'll need a file called 'proportion.txt' with a single number: the proportion of missing data you wish to allow e.g.
+```
+0.2
+```
+Then run:
+```
+Rscript completeness.R
+```

@@ -33,7 +33,7 @@ for i in `\ls`; do sed -i 's/ 2:/ 1:/g' $i/split-adapter-quality-trimmed/*READ2*
 for i in `\ls`; do gzip $i/split-adapter-quality-trimmed/*READ2*; done;
 ```
 
-4) Back in the main folder where your locus.fasta files used to be, and where you now have your subfolders consisting of each of your samples (each containing a reference.fa file): run the phase_everyone.sh script in this folder (make sure coverage.R from the main folder and modref.R from this folder are also in here, and phasing_settings etc has been set up as for the main instructions).
+4) Back in the main folder where your locus.fasta files used to be, and where you now have your subfolders consisting of each of your samples (each containing a reference.fa file): run the phase_everyone.sh script in this folder (make sure coverage.R from the main folder and modref.R from this folder are also in here, and phasing_settings etc has been set up as for the main instructions - note the comment about ${name} in the main instructions).
 ```
 bash phasing_everyone.sh
 ```

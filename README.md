@@ -73,7 +73,7 @@ Line 3: path to picard
 
 Line 4: paired or single, depending on your sequencing method
 
-Line 5: the pathway to your 'cleaned' F reads (or just your cleaned reads if single end). Substitute "${name}" for the actual sample name wherever this occurs in the pathway to the reads. This program expects the to the reads to be standard across your samples, so you will need to rename them if this is not the case
+Line 5: the pathway to your 'cleaned' F reads (or just your cleaned reads if single end). "${name}" should be used as a placeholder for the actual sample name wherever this occurs in the pathway to the reads (as the actual ${name} will be inserted by the script based on samples.txt (phasing.sh) or samplenames.txt (phase_everyone/phase_everyone.sh). This program expects the path to the reads to be standard across your samples, so you will need to rename them if this is not the case
 
 Line 6: the same thing for your 'cleaned' R reads if you have paired sequence data
 
@@ -92,7 +92,7 @@ Another example of the pathway to the reads where these are in a folder with the
 /home/a499a400/Kaloula/cleaned-reads/${name}/split-adapter-quality-trimmed/${name}-READ2.fastq.gz
 ```
 
-As well as your phasing_settings file, you'll need a file ("samples.txt") which lists the samples you are interested in assembling, one on each line. The names given here should match the ${name} given in phasing_settings e.g. 
+As well as your phasing_settings file, you'll need a file ("samples.txt") which lists the samples you are interested in assembling, one on each line ("samplenames.txt if running the phase_everyone/phase_everyone.sh script). The names given here should match the ${name} given in phasing_settings e.g. 
 ```
 MQ23qc
 Eau09AI233qc

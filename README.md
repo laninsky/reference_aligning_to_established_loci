@@ -61,7 +61,7 @@ If everything went OK with the previous script, and you have a copy of your locu
 
 -- installed picard using apache ant
 
--- unzipped the gatk binary
+-- unzipped the gatk folder
 
 You will also need to set up a 'phasing_settings' file. On each separate line, in this order, you will need:
 

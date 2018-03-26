@@ -67,7 +67,7 @@ You will also need to set up a 'phasing_settings' file. On each separate line, i
 
 Line 1: path to your up-to-data jdk/bin/java. If your default 'java' command is pointing to the right version, you can just put in java on this line (I have had trouble with $JAVA_HOME on systems where the native shell is not bash)
 
-Line 2: path to gatk containing the gatk executable
+Line 2: path to folder containing the gatk executable
 
 Line 3: path to picard
 

@@ -37,16 +37,16 @@ samtools index tempsortmarked.bam;
 # These tools were depreciated in gatk version 4
 #$gatk/gatk -T RealignerTargetCreator -R reference.fa -I tempsortmarked.bam -o tempintervals.list;
 #$gatk/gatk -T IndelRealigner -R reference.fa -I tempsortmarked.bam -targetIntervals tempintervals.list -o temp_realigned_reads.bam;
-$gatk/gatk DepthOfCoverage -R reference.fa -I temp_realigned_reads.bam -o temp.coverage;
+$gatk/gatk DepthOfCoverage -R reference.fa -I temp_realigned_reads.bam -O temp.coverage;
 rm -rf temp.coverage.sample_*;
 echo $name > name;
 Rscript coverage.R;
 
 # The -stand_emit_conf 30 option is deprecated in GATK v 3.7 and was removed from this code on the 5-June-2017
-$gatk/gatk HaplotypeCaller -R reference.fa -I temp_realigned_reads.bam -stand-call-conf 30 -o temp_raw_variants.vcf;
-$gatk/gatk ReadBackedPhasing -R reference.fa -I temp_realigned_reads.bam  --variant temp_raw_variants.vcf -o temp_phased_SNPs.vcf;
-$gatk/gatk FindCoveredIntervals -R reference.fa -I temp_realigned_reads.bam -cov 1 -o temp_covered.list;
-$gatk/gatk FastaAlternateReferenceMaker -V temp_phased_SNPs.vcf -R reference.fa -L temp_covered.list -o temp_alt.fa;
+$gatk/gatk HaplotypeCaller -R reference.fa -I temp_realigned_reads.bam -stand-call-conf 30 -O temp_raw_variants.vcf;
+$gatk/gatk ReadBackedPhasing -R reference.fa -I temp_realigned_reads.bam  --variant temp_raw_variants.vcf -O temp_phased_SNPs.vcf;
+$gatk/gatk FindCoveredIntervals -R reference.fa -I temp_realigned_reads.bam -cov 1 -O temp_covered.list;
+$gatk/gatk FastaAlternateReferenceMaker -V temp_phased_SNPs.vcf -R reference.fa -L temp_covered.list -O temp_alt.fa;
 
 Rscript modref.R;
 
@@ -77,10 +77,10 @@ samtools index tempsortmarked.bam;
 #$gatk/gatk -T RealignerTargetCreator -R $name.fa -I tempsortmarked.bam -o tempintervals.list;
 #$gatk/gatk -T IndelRealigner -R $name.fa -I  tempsortmarked.bam -targetIntervals tempintervals.list -o temp_realigned_reads.bam;
 # The -stand_emit_conf 30 option is deprecated in GATK v 3.7 and was removed from this code on the 5-June-2017
-$gatk/gatk HaplotypeCaller -R $name.fa -I temp_realigned_reads.bam -stand-call-conf 30 -o temp_raw_variants.vcf;
-$gatk/gatk ReadBackedPhasing -R $name.fa -I temp_realigned_reads.bam  --variant temp_raw_variants.vcf -o temp_phased_SNPs.vcf;
-$gatk/gatk FindCoveredIntervals -R $name.fa -I temp_realigned_reads.bam -cov 1 -o temp_covered.list;
-$gatk/gatk FastaAlternateReferenceMaker -V temp_phased_SNPs.vcf -R $name.fa -o temp_alt.fa;
+$gatk/gatk HaplotypeCaller -R $name.fa -I temp_realigned_reads.bam -stand-call-conf 30 -O temp_raw_variants.vcf;
+$gatk/gatk ReadBackedPhasing -R $name.fa -I temp_realigned_reads.bam  --variant temp_raw_variants.vcf -O temp_phased_SNPs.vcf;
+$gatk/gatk FindCoveredIntervals -R $name.fa -I temp_realigned_reads.bam -cov 1 -O temp_covered.list;
+$gatk/gatk FastaAlternateReferenceMaker -V temp_phased_SNPs.vcf -R $name.fa -O temp_alt.fa;
 
 Rscript modref.R;
 

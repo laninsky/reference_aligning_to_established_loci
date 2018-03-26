@@ -75,7 +75,9 @@ Line 4: paired or single, depending on your sequencing method
 
 Line 5: the pathway to your 'cleaned' F reads (or just your cleaned reads if single end). "${name}" should be used as a placeholder for the actual sample name wherever this occurs in the pathway to the reads (as the actual ${name} will be inserted by the script based on samples.txt (phasing.sh) or samplenames.txt (phase_everyone/phase_everyone.sh). This program expects the path to the reads to be standard across your samples, so you will need to rename them if this is not the case
 
-Line 6: the same thing for your 'cleaned' R reads if you have paired sequence data
+Line 6: the same thing for your 'cleaned' R reads if you have paired sequence data (blank if you don't)
+
+Line 7: the path to GATK3.8/GenomeAnalysisTK.jar (unfortunately not all tools needed were ported to GATK v4)
 
 e.g.
 ```
@@ -85,6 +87,7 @@ e.g.
 paired
 /nfs1/FW_HMSC/Baker_Lab/emma_temp/ddRAD_for_Alana/QC_Phred20_discardN/${name}.1.fq.gz
 /nfs1/FW_HMSC/Baker_Lab/emma_temp/ddRAD_for_Alana/QC_Phred20_discardN/${name}.2.fq.gz
+/nfs1/FW_HMSC/Baker_Lab/bin/GenomeAnalysisTK.jar
 ```
 Another example of the pathway to the reads where these are in a folder with the name of the sample:
 ```

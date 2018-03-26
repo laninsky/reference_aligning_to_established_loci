@@ -92,7 +92,7 @@ Another example of the pathway to the reads where these are in a folder with the
 /home/a499a400/Kaloula/cleaned-reads/${name}/split-adapter-quality-trimmed/${name}-READ2.fastq.gz
 ```
 
-Example if using pre-version 4 of gatk (make sure to use the phase_everyone_pre_v4_gatk.sh versions)
+Example if using pre-version 4 of gatk (make sure to use the phas*_pre_v4_gatk.sh versions)
 ```
 /nfs1/FW_HMSC/Baker_Lab/bin/jdk1.8.0_72/bin/java
 /nfs1/FW_HMSC/Baker_Lab/bin/GenomeAnalysisTK.jar

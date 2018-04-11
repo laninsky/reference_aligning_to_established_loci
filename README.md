@@ -4,6 +4,10 @@ Starting with the *.alleles file produced by pyRAD, (1) produces one fasta file 
 
 The phase_everyone folder is a little different in that it assumes you are reference-aligning samples to their own reference (e.g. aligning reads from Sample_A to loci derived from Sample_A in order to phase them), and doing this for all samples in the dataset (rather than the instructions in this README, where you are aliging Sample_B to loci derived from Sample_A and then adding Sample_A's phased loci to your dataset).
 
+# Note about applying to amplicon sequencing
+Please see the discussion about potential problems with applying this code to amplicon sequencing mentioned at:
+https://github.com/laninsky/direct_mito_sequencing/blob/master/4_filtering_fasta_on_pileup/README.md
+
 # Step 1
 Make sure to modify your allelefilename to what your allele file is actually called.
 ```

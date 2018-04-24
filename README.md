@@ -71,7 +71,7 @@ You will also need to set up a 'phasing_settings' file. On each separate line, i
 
 Line 1: path to your up-to-data jdk/bin/java. If your default 'java' command is pointing to the right version, you can just put in java on this line (I have had trouble with $JAVA_HOME on systems where the native shell is not bash)
 
-Line 2: path to folder containing the gatk executable
+Line 2: the path to GATK3.8/GenomeAnalysisTK.jar (unfortunately not all tools needed were ported to GATK v4 so we are still on GATK v3.8 with this pipeline)
 
 Line 3: path to picard
 
@@ -81,32 +81,23 @@ Line 5: the pathway to your 'cleaned' F reads (or just your cleaned reads if sin
 
 Line 6: the same thing for your 'cleaned' R reads if you have paired sequence data (blank if you don't)
 
-Line 7: the path to GATK3.8/GenomeAnalysisTK.jar (unfortunately not all tools needed were ported to GATK v4)
+Line 7: The number of threads you'd like to use for the bwa alignment step
 
 e.g.
 ```
 /nfs1/FW_HMSC/Baker_Lab/bin/jdk1.8.0_72/bin/java
-/nfs1/FW_HMSC/Baker_Lab/bin/gatk_folder
+/nfs1/FW_HMSC/Baker_Lab/bin/GenomeAnalysisTK.jar
 /nfs1/FW_HMSC/Baker_Lab/bin/picard/dist/picard.jar
 paired
 /nfs1/FW_HMSC/Baker_Lab/emma_temp/ddRAD_for_Alana/QC_Phred20_discardN/${name}.1.fq.gz
 /nfs1/FW_HMSC/Baker_Lab/emma_temp/ddRAD_for_Alana/QC_Phred20_discardN/${name}.2.fq.gz
-/nfs1/FW_HMSC/Baker_Lab/bin/GenomeAnalysisTK.jar
+4
 ```
+
 Another example of the pathway to the reads where these are in a folder with the name of the sample:
 ```
 /home/a499a400/Kaloula/cleaned-reads/${name}/split-adapter-quality-trimmed/${name}-READ1.fastq.gz
 /home/a499a400/Kaloula/cleaned-reads/${name}/split-adapter-quality-trimmed/${name}-READ2.fastq.gz
-```
-
-Example if using pre-version 4 of gatk (make sure to use the phas*_pre_v4_gatk.sh versions)
-```
-/nfs1/FW_HMSC/Baker_Lab/bin/jdk1.8.0_72/bin/java
-/nfs1/FW_HMSC/Baker_Lab/bin/GenomeAnalysisTK.jar
-/nfs1/FW_HMSC/Baker_Lab/bin/picard/dist/picard.jar
-paired
-/nfs1/FW_HMSC/Baker_Lab/emma_temp/ddRAD_for_Alana/QC_Phred20_discardN/${name}.1.fq.gz
-/nfs1/FW_HMSC/Baker_Lab/emma_temp/ddRAD_for_Alana/QC_Phred20_discardN/${name}.2.fq.gz
 ```
 
 As well as your phasing_settings file, you'll need a file ("samples.txt") which lists the samples you are interested in assembling, one on each line ("samplenames.txt if running the phase_everyone/phase_everyone.sh script). The names given here should match the ${name} given in phasing_settings e.g. 
@@ -313,6 +304,8 @@ Rscript completeness.R
 ```
 
 # Version history
+v0.0.3: Couldn't get the coverage tools to work using the combination of GATK v 4.0 and v 3.8 so reverted everything back to 3.8.
+
 v0.0.2: GATK v 4.0 is a standalone executable rather than a *.jar file, so this was tweaked in the code on the 26-Mar-2018. The previous phase_everyone.sh files are available as phase_everyone_pre_v4_gatk.sh
 
 v0.0.1: The -stand_emit_conf 30 option is deprecated in GATK v 3.7 and was removed from this code on the 5-June-2017

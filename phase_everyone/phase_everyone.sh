@@ -3,7 +3,7 @@ gatk=`tail -n+2 phasing_settings | head -n1`;
 picard=`tail -n+3 phasing_settings | head -n1`;
 sequencing=`tail -n+4 phasing_settings | head -n1`;
 gatk38=`tail -n+6 phasing_settings | head -n1`;
-numbercores=`tail -n+7 ref_map_params.txt | head -n1`;
+numberofcores=`tail -n+7 phasing_settings | head -n1`;
 
 nosamples=`wc -l samplenames.txt | awk '{print $1}'`;
 

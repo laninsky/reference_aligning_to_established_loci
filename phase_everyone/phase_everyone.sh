@@ -3,6 +3,7 @@ gatk=`tail -n+2 phasing_settings | head -n1`;
 picard=`tail -n+3 phasing_settings | head -n1`;
 sequencing=`tail -n+4 phasing_settings | head -n1`;
 gatk38=`tail -n+6 phasing_settings | head -n1`;
+numbercores=`tail -n+7 ref_map_params.txt | head -n1`;
 
 nosamples=`wc -l samplenames.txt | awk '{print $1}'`;
 
@@ -23,12 +24,12 @@ if [ $sequencing == paired ]
 then
 reverse_proto=`tail -n+6 phasing_settings | head -n1`;
 reverse=`eval "echo $reverse_proto"`;
-bwa mem reference.fa $forward $reverse > temp.sam;
+bwa mem -t $numberofcores reference.fa $forward $reverse > temp.sam;
 fi
 
 if [ $sequencing == single ]
 then
-bwa mem reference.fa $forward > temp.sam;
+bwa mem -t $numberofcores reference.fa $forward > temp.sam;
 fi
 
 $javapath -jar $picard AddOrReplaceReadGroups I=temp.sam O=tempsort.sam SORT_ORDER=coordinate LB=rglib PL=illumina PU=phase SM=everyone;
@@ -61,12 +62,12 @@ $javapath -jar $picard CreateSequenceDictionary R=$name.fa O=$name.dict;
 
 if [ $sequencing == paired ]
 then
-bwa mem $name.fa $forward $reverse > temp.sam;
+bwa mem -t $numberofcores $name.fa $forward $reverse > temp.sam;
 fi
 
 if [ $sequencing == single ]
 then
-bwa mem $name.fa $forward > temp.sam;
+bwa mem -t $numberofcores $name.fa $forward > temp.sam;
 fi
 
 $javapath -jar $picard AddOrReplaceReadGroups I=temp.sam O=tempsort.sam SORT_ORDER=coordinate LB=rglib PL=illumina PU=phase SM=everyone;

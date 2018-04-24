@@ -38,7 +38,7 @@ samtools index tempsortmarked.bam;
 # These tools were depreciated in gatk version 4
 #$gatk/gatk -T RealignerTargetCreator -R reference.fa -I tempsortmarked.bam -o tempintervals.list;
 #$gatk/gatk -T IndelRealigner -R reference.fa -I tempsortmarked.bam -targetIntervals tempintervals.list -o temp_realigned_reads.bam;
-#$gatk/gatk DepthOfCoverage -R reference.fa -I temp_realigned_reads.bam -O temp.coverage;
+java -jar $gatk38 -T DepthOfCoverage -R reference.fa -I tempsortmarked.bam -O temp.coverage;
 rm -rf temp.coverage.sample_*;
 echo $name > name;
 Rscript coverage.R;

@@ -2,8 +2,8 @@ javapath=`tail -n+1 phasing_settings | head -n1`;
 gatk=`tail -n+2 phasing_settings | head -n1`;
 picard=`tail -n+3 phasing_settings | head -n1`;
 sequencing=`tail -n+4 phasing_settings | head -n1`;
-gatk38=`tail -n+6 phasing_settings | head -n1`
-numberofcores=`tail -n+7 ref_map_params.txt | head -n1`;
+gatk38=`tail -n+7 phasing_settings | head -n1`
+numberofcores=`tail -n+8 ref_map_params.txt | head -n1`;
 
 sed -i 's/\?/N/g' reference.fa;
 sed -i 's/-//g' reference.fa;

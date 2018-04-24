@@ -83,6 +83,8 @@ Line 6: the same thing for your 'cleaned' R reads if you have paired sequence da
 
 Line 7: the path to GATK3.8/GenomeAnalysisTK.jar (unfortunately not all tools needed were ported to GATK v4)
 
+Line 8: the number of threads you'd like bwa to use
+
 e.g.
 ```
 /nfs1/FW_HMSC/Baker_Lab/bin/jdk1.8.0_72/bin/java
@@ -92,6 +94,7 @@ paired
 /nfs1/FW_HMSC/Baker_Lab/emma_temp/ddRAD_for_Alana/QC_Phred20_discardN/${name}.1.fq.gz
 /nfs1/FW_HMSC/Baker_Lab/emma_temp/ddRAD_for_Alana/QC_Phred20_discardN/${name}.2.fq.gz
 /nfs1/FW_HMSC/Baker_Lab/bin/GenomeAnalysisTK.jar
+4
 ```
 Another example of the pathway to the reads where these are in a folder with the name of the sample:
 ```
@@ -107,6 +110,7 @@ Example if using pre-version 4 of gatk (make sure to use the phas*_pre_v4_gatk.s
 paired
 /nfs1/FW_HMSC/Baker_Lab/emma_temp/ddRAD_for_Alana/QC_Phred20_discardN/${name}.1.fq.gz
 /nfs1/FW_HMSC/Baker_Lab/emma_temp/ddRAD_for_Alana/QC_Phred20_discardN/${name}.2.fq.gz
+4
 ```
 
 As well as your phasing_settings file, you'll need a file ("samples.txt") which lists the samples you are interested in assembling, one on each line ("samplenames.txt if running the phase_everyone/phase_everyone.sh script). The names given here should match the ${name} given in phasing_settings e.g. 

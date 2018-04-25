@@ -33,6 +33,7 @@ fi
 
 $javapath -jar $picard AddOrReplaceReadGroups I=temp.sam O=tempsort.sam SORT_ORDER=coordinate LB=rglib PL=illumina PU=phase SM=everyone;
 $javapath -jar $picard MarkDuplicates MAX_FILE_HANDLES=1000 I=tempsort.sam O=tempsortmarked.sam M=temp.metrics AS=TRUE;
+sed -i '/LN:0/d' tempsortmarked.sam
 $javapath -jar $picard SamFormatConverter I=tempsortmarked.sam O=tempsortmarked.bam;
 samtools index tempsortmarked.bam;
 $javapath -jar $gatk -T RealignerTargetCreator -R reference.fa -I tempsortmarked.bam -o tempintervals.list;
@@ -71,6 +72,7 @@ fi
 
 $javapath -jar $picard AddOrReplaceReadGroups I=temp.sam O=tempsort.sam SORT_ORDER=coordinate LB=rglib PL=illumina PU=phase SM=everyone;
 $javapath -jar $picard MarkDuplicates MAX_FILE_HANDLES=1000 I=tempsort.sam O=tempsortmarked.sam M=temp.metrics AS=TRUE;
+sed -i '/LN:0/d' tempsortmarked.sam
 $javapath -jar $picard SamFormatConverter I=tempsortmarked.sam O=tempsortmarked.bam;
 samtools index tempsortmarked.bam;
 $javapath -jar $gatk -T RealignerTargetCreator -R $name.fa -I tempsortmarked.bam -o tempintervals.list;

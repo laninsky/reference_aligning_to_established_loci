@@ -46,8 +46,8 @@ Rscript coverage.R;
 
 # The -stand_emit_conf 30 option is deprecated in GATK v 3.7 and was removed from this code on the 5-June-2017
 $gatk/gatk HaplotypeCaller -R reference.fa -I tempsortmarked.bam -stand-call-conf 30 -O temp_raw_variants.vcf;
-java -jar $gatk38 -T FindCoveredIntervals -R reference.fa -I tempsortmarked.bam -cov 1 -o temp_covered.list;
-java -jar $gatk38 -T FastaAlternateReferenceMaker -V temp_raw_variants.vcf  -R reference.fa -L temp_covered.list -o temp_alt.fa;
+$javapath -jar $gatk38 -T FindCoveredIntervals -R reference.fa -I tempsortmarked.bam -cov 1 -o temp_covered.list;
+$javapath -jar $gatk38 -T FastaAlternateReferenceMaker -V temp_raw_variants.vcf  -R reference.fa -L temp_covered.list -o temp_alt.fa;
 
 Rscript modref.R;
 
@@ -80,8 +80,8 @@ samtools index tempsortmarked.bam;
 #$gatk/gatk -T IndelRealigner -R $name.fa -I  tempsortmarked.bam -targetIntervals tempintervals.list -o temp_realigned_reads.bam;
 # The -stand_emit_conf 30 option is deprecated in GATK v 3.7 and was removed from this code on the 5-June-2017
 $gatk/gatk HaplotypeCaller -R $name.fa -I tempsortmarked.bam -stand-call-conf 30 -O temp_raw_variants.vcf;
-java -jar $gatk38 -T FindCoveredIntervals -R $name.fa -I tempsortmarked.bam -cov 1 -o temp_covered.list;
-java -jar $gatk38 -T FastaAlternateReferenceMaker -V temp_raw_variants.vcf -R $name.fa -o temp_alt.fa;
+$javapath -jar $gatk38 -T FindCoveredIntervals -R $name.fa -I tempsortmarked.bam -cov 1 -o temp_covered.list;
+$javapath -jar $gatk38 -T FastaAlternateReferenceMaker -V temp_raw_variants.vcf -R $name.fa -o temp_alt.fa;
 
 Rscript modref.R;
 

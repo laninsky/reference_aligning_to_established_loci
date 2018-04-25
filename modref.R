@@ -1,15 +1,15 @@
 library(stringr)
 intable <- read.table("temp_alt.fa",header=FALSE,stringsAsFactors=FALSE,sep="\t")
 
+# getting a list of the original locus names
 loci <- intable[(which(grepl(">",intable[,1])==TRUE)),1]
 for (i in 1:(length(loci))) {
 loci[i] <- paste(">",(unlist(strsplit((unlist(strsplit(loci[i]," "))[2]),":"))[1]),sep="")
 }
 
+# setting up a temporary matrix where we haven't combined sections of the same locus that have more than one sequence
 rows <- dim(intable)[1]
-
 tablelength <- length(loci)*2
-
 to_write <- matrix(NA,ncol=1,nrow=tablelength)
 
 to_write[1,1] <- loci[1]
@@ -30,6 +30,7 @@ sequencepaste <- paste(sequencepaste,intable[j,1],sep="")
 }
 
 to_write[tablelength,1] <- sequencepaste
+
 
 locinames <- to_write[(seq(1,(dim(to_write)[1]),2)),1]
 dupllocinames <- locinames[duplicated(locinames)]

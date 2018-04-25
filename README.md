@@ -317,6 +317,8 @@ Rscript completeness.R
 ```
 
 # Version history
+v.0.0.3: Cleaning up some of the GATK v 4.0 code, and also tweaking modref.R which would have thrown weird errors if sequences had been broken into more than two bits.
+
 v0.0.2: GATK v 4.0 is a standalone executable rather than a *.jar file, so this was tweaked in the code on the 26-Mar-2018. The previous phase_everyone.sh files are available as phase_everyone_pre_v4_gatk.sh
 
 v0.0.1: The -stand_emit_conf 30 option is deprecated in GATK v 3.7 and was removed from this code on the 5-June-2017

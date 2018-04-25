@@ -32,33 +32,6 @@ then
 bwa mem -t $numberofcores reference.fa $forward > temp.sam;
 fi
 
-grep LN:0 temp.sam | awk '{print $3}' > templineremove
-templineremoveno=`wc -l templineremove | awk '{print $1}'`
-if  [ $templineremoveno > 0 ]
-then
-rm -rf reference.fa.*
-rm -rf reference.dict
-for j in `seq 1 $temlineremoveno`;
-do removeseq=`tail -n+$j templineremove | head -n1`;
-sed -i "/$removeseq/ { N; d; }" reference.fa
-done
-bwa index -a is reference.fa;
-samtools faidx reference.fa;
-$javapath -jar $picard CreateSequenceDictionary R=reference.fa O=reference.dict;
-
-if [ $sequencing == paired ]
-then
-reverse_proto=`tail -n+6 phasing_settings | head -n1`;
-reverse=`eval "echo $reverse_proto"`;
-bwa mem -t $numberofcores reference.fa $forward $reverse > temp.sam;
-fi
-
-if [ $sequencing == single ]
-then
-bwa mem -t $numberofcores reference.fa $forward > temp.sam;
-fi
-fi
-
 $javapath -jar $picard AddOrReplaceReadGroups I=temp.sam O=tempsort.sam SORT_ORDER=coordinate LB=rglib PL=illumina PU=phase SM=everyone;
 $javapath -jar $picard MarkDuplicates MAX_FILE_HANDLES=1000 I=tempsort.sam O=tempsortmarked.sam M=temp.metrics AS=TRUE;
 $javapath -jar $picard SamFormatConverter I=tempsortmarked.sam O=tempsortmarked.bam;

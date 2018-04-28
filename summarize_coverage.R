@@ -1,6 +1,6 @@
 intable <- read.table("coverage_summary.txt",header=FALSE,stringsAsFactors=FALSE,sep=" ")
-locinames <- read.table("fasta_names",header=FALSE,stringsAsFactors=FALSE,sep=" ")
-samplenames <- read.table("samples.txt",header=FALSE,stringsAsFactors=FALSE,sep=" ")
+locinames <- matrix(unique(intable[,2])[-1],ncol=1)
+samplenames <- matrix(unique(intable[,1])[-1],ncol=1)
 
 noloci <- dim(locinames)[1]
 nosamples <- dim(samplenames)[1]

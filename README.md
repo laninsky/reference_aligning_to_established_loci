@@ -1,6 +1,6 @@
 # Reference_aligning_to_established_loci
 
-Starting with the *.alleles file produced by pyRAD, (1) produces one fasta file per locus containing all the alleles present for each sample at that locus; (2) pulls one allele from each locus file for the species/samples you are interested in to act as a reference and stores these in a single fasta file; (3) carries out a reference-based alignment using bwa, gatk, samtools and picard using these reference loci; (4) generates a summary of the data and SNP files for downstream use using code similar to that found in: https://github.com/laninsky/pyRAD_alleles_into_structure; (5) combines these alleles for your new samples with the previous samples from step #2; (6) aligns the alleles for your new samples with your previous samples using MAFFT; (7) pulls out the SNPs from each locus for each of your fasta files; (8) filters these SNPs by lineages you require to be present/missing data to just one SNP per locus; and finally (9) (optional) further filters the SNPs for your reference-aligned samples to meet a minimum depth requirement.
+Starting with the *.alleles file produced by ipyrad, (1) produces one fasta file per locus containing all the alleles present for each sample at that locus; (2) pulls one allele from each locus file for the species/samples you are interested in to act as a reference and stores these in a single fasta file; (3) carries out a reference-based alignment using bwa, gatk, samtools and picard using these reference loci; (4) generates a summary of the data and SNP files for downstream use using code similar to that found in: https://github.com/laninsky/pyRAD_alleles_into_structure; (5) combines these alleles for your new samples with the previous samples from step #2; (6) aligns the alleles for your new samples with your previous samples using MAFFT; (7) pulls out the SNPs from each locus for each of your fasta files; (8) filters these SNPs by lineages you require to be present/missing data to just one SNP per locus; and finally (9) (optional) further filters the SNPs for your reference-aligned samples to meet a minimum depth requirement.
 
 The phase_everyone folder is a little different in that it assumes you are reference-aligning samples to their own reference (e.g. aligning reads from Sample_A to loci derived from Sample_A in order to phase them), and doing this for all samples in the dataset (rather than the instructions in this README, where you are aliging Sample_B to loci derived from Sample_A and then adding Sample_A's phased loci to your dataset).
 
@@ -10,6 +10,9 @@ https://github.com/laninsky/direct_mito_sequencing/blob/master/4_filtering_fasta
 
 # Step 1
 Make sure to modify your allelefilename to what your allele file is actually called.
+
+# I need to modify this step and make sure that it still works with loci files now that ipyrad doesn't create allele files.
+
 ```
 bash
 allelefilename=c88d6m4p3.alleles
@@ -57,15 +60,7 @@ done
 ```
 
 # Step 3
-If everything went OK with the previous script, and you have a copy of your locus specific fasta files in another location (call it backup/*.fasta because we'll use this further down), you can delete the locus specific fasta files in this folder (just to make ls etc a little quicker). This step is going to carry out the reference-guided assembly for your samples. You will need to have bwa, samtools, gatk and picard installed, with bwa and samtools in your path. To install picard, I did the following:
-
--- installed up to date apache ant, declared ANT_HOME. Added full path to ant to $path/$PATH
-
--- installed htsjdk using apache ant, and then copied directory to picard's folder after installation
-
--- installed picard using apache ant
-
--- unzipped the gatk folder
+If everything went OK with the previous script, and you have a copy of your locus specific fasta files in another location (call it backup/*.fasta because we'll use this further down), you can delete the locus specific fasta files in this folder (just to make ls etc a little quicker). This step is going to carry out the reference-guided assembly for your samples. You will need to have bwa, samtools, gatk and picard installed, with bwa and samtools in your path. 
 
 You will also need to set up a 'phasing_settings' file. On each separate line, in this order, you will need:
 

@@ -2,7 +2,7 @@
 
 You'll have a fasta file with the target loci that you are interested in pulling down from your sample. This might be a file that doesn't have multiple taxa (i.e. each target locus is present just once), or it may have multiple taxa per locus. This first little script is going to split out the fasta file into locus specific files.
 
-### Getting your locus-specific fasta files together
+### 1. Getting your locus-specific fasta files together
 First, define your file name
 ```
 fastafilename=target_Zhang_et_al.fa
@@ -86,3 +86,10 @@ done;
 
 fi
 ```
+
+### 2. Using your locus specific fasta files as references to pull down the specific sequence for each sample
+-- allow for multiple mapping and then use the consensus to pull down the final locus
+
+
+
+

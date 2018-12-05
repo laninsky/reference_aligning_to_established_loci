@@ -36,9 +36,14 @@ done;
 echo $fasta_sequence | awk '{print $1}' >> fasta_files/$locus_name.fasta
 ```
 For files where the target locus is present more than once you'll need to define how the sequence header combines the 
-the sample name and the gene/locus name
+the sample name and the gene/locus name e.g. what delimits them, and what is the first field
 ```
-sample_gene_name=$samplename-$genename
+delimiter="-"
+first_field="sample"
+# or alternatively first_field="locus"
+
+
+
 
 
 

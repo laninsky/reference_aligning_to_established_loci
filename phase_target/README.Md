@@ -58,9 +58,31 @@ echo $headercontents >> fasta_files/$locus_name.fasta
 fasta_sequence=""
 else
 fasta_sequence="$fasta_sequence$linecontents"
-i=$(expr $i + 1);
 fi
 done;
 
 echo $fasta_sequence | awk '{print $1}' >> fasta_files/$locus_name.fasta
+
+else
+
+headercontents=`tail -n+1 $allelefilename | head -n1`
+locus_name=`echo $headercontents | sed 's/>//g' | sed -E "s/(.*)$delimiter(.*)/\1/g"`
+headercontents=`echo $headercontents | sed -E "s/(.*)$delimiter(.*)/\2/g"`
+echo $headercontents >> fasta_files/$locus_name.fasta
+fasta_sequence=""
+
+for j in `seq 2 $nolines`;
+do linecontents=`tail -n+$j $allelefilename | head -n1`;
+if echo $linecontents | grep --quiet ">";
+then echo $fasta_sequence | awk '{print $1}' >> fasta_files/$locus_name.fasta;
+locus_name=`echo $linecontents | sed 's/>//g' | sed -E "s/(.*)$delimiter(.*)/\1/g"`
+headercontents=`echo $linecontents | sed -E "s/(.*)$delimiter(.*)/\2/g"`
+echo $headercontents >> fasta_files/$locus_name.fasta
+fasta_sequence=""
+else
+fasta_sequence="$fasta_sequence$linecontents"
+fi
+done;
+
+fi
 ```

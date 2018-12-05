@@ -1,4 +1,4 @@
-# Phase target
+# Phase_target
 
 You'll have a fasta file with the target loci that you are interested in pulling down from your sample. This might be a file that doesn't have multiple taxa (i.e. each target locus is present just once), or it may have multiple taxa per locus. This first little script is going to split out the fasta file into locus specific files.
 
@@ -29,3 +29,5 @@ fasta_sequence="$fasta_sequence$linecontents"
 i=$(expr $i + 1);
 fi
 done;
+
+echo $fasta_sequence | awk '{print $1}' >> fasta_files/$locus_name.fasta

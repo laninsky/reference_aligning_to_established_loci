@@ -88,7 +88,9 @@ fi
 ```
 
 ### 2. Using your locus specific fasta files as references to pull down the specific sequence for each sample
-Stuff that needs to be installed: Java, GATK v4.0, GATK v3.8, picard (paths to these will be defined below). Also on your path you'll need bwa, samtools, mafft, and R. You will then need to set up a 'phasing_settings' file, a samples.txt file (both described below), and have the associated Rscripts in this repository in your working directory as well. On each separate line, in this order, you will need:
+Stuff that needs to be installed: Java, GATK v4.0, GATK v3.8, picard (paths to these will be defined below). Also on your path you'll need bwa, samtools, mafft, and R. You will then need to set up a 'phasing_settings' file, a samples.txt file (both described below), and have the associated Rscripts in this repository in your working directory as well. 
+
+For phasing_settings, on each separate line, in this order, you will need:
 
 Line 1: path to your up-to-data jdk/bin/java. If your default 'java' command is pointing to the right version, you can just put in java on this line (I have had trouble with $JAVA_HOME on systems where the native shell is not bash)
 
@@ -104,7 +106,7 @@ Line 6: the same thing for your 'cleaned' R reads if you have paired sequence da
 
 Line 7: the path to GATK3.8/GenomeAnalysisTK.jar (unfortunately not all tools needed were ported to GATK v4)
 
-Line 8: the number of threads you'd like bwa to use
+Line 8: the number of threads you'd like to use PER SAMPLE (e.g. if you have 5 samples, and you select 4 threads, 5\*4 = 20 threads total)
 
 e.g.
 ```
@@ -154,7 +156,10 @@ gzip $newname;
 done
 ```
 
--- allow for multiple mapping and then use the consensus to pull down the final locus
+To run this step, make sure you've installed all the programs, have created the phasing_settings and samples.txt files, and have copied the \*.sh and \*.R scripts to your working directory. Then to run:
+```
+bash generate_reference.sh &> generate_reference.log
+```
 
 
 

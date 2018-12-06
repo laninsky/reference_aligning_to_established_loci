@@ -124,6 +124,25 @@ Another example of the pathway to the reads where these are in a folder with the
 /home/a499a400/Kaloula/cleaned-reads/${name}/split-adapter-quality-trimmed/${name}-READ2.fastq.gz
 ```
 
+As well as your phasing_settings file, you'll need a file ("samples.txt") which lists the samples you are interested in assembling, one on each line. The names given here should match the ${name} given in phasing_settings e.g.
+```
+MQ23qc
+Eau09AI233qc
+Eau09AI164qc
+PV56sqc
+PV70mqc
+Eau09AI136qc
+PV50mqc
+```
+If you have paired end data, before you run the script for this step, make sure that your F and R files have the same read names in both (i.e. you cannot have a suffix of _1 in the read1 file, and _2 in the read2 file). If they have different names in each file, use sed to rename them e.g.
+```
+for i in `ls *.2.fq.gz`;
+do gunzip $i;
+newname=`echo $i | sed 's/.gz//g'`;
+sed -i 's/_2$/_1/g' $newname;
+gzip $newname;
+done
+```
 
 -- allow for multiple mapping and then use the consensus to pull down the final locus
 

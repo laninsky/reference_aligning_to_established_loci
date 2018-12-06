@@ -33,13 +33,15 @@ then
 bwa mem -V -t $numberofcores $j $forward > temp.sam;
 fi
 
-$javapath -jar $picard AddOrReplaceReadGroups I=temp.sam O=tempsort.sam SORT_ORDER=coordinate LB=rglib PL=illumina PU=phase SM=everyone
-$javapath -jar $picard MarkDuplicates MAX_FILE_HANDLES=1000 I=tempsort.sam O=tempsortmarked.sam M=temp.metrics AS=TRUE
-$javapath -jar $picard SamFormatConverter I=tempsortmarked.sam O=tempsortmarked.bam
-rm -rf *.sam
-rm temp.metrics
-samtools index -@ $numberofcores tempsortmarked.bam
-samtools mpileup -f $j tempsortmarked.bam > $name.pileup
+# Convert temp.sam to temp.bam, outputting only reads that have mapping quality
+samtools view -@ $numberofcores -b -F 5 -T $j temp.sam > temp.bam
+# Sorting bam and indexing resulting file
+samtools sort -@ $numberofcores temp.bam > tempsorted.bam
+samtools index -@ $numberofcores tempsorted.bam
+# Printing out pileup
+samtools mpileup -f $j tempsorted.bam > $name.pileup
+
+
 
 
 

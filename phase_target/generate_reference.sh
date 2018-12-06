@@ -14,7 +14,9 @@ bwa index -a is $j;
 samtools faidx $j;
 $javapath -jar $picard CreateSequenceDictionary R=$j O=$j.dict;
 
-for i in `seq 1 $nosamples`;
+samplearray=( `seq 1 $nosamples` )
+
+for i in "${samplearray[@]}";
 do name=`tail -n+$i samples.txt | head -n1`;
 forward_proto=`tail -n+5 phasing_settings | head -n1`;
 forward=`eval "echo $forward_proto"`;
@@ -23,26 +25,26 @@ if [ $sequencing == paired ]
 then
 reverse_proto=`tail -n+6 phasing_settings | head -n1`;
 reverse=`eval "echo $reverse_proto"`;
-bwa mem -V -t $numberofcores $j $forward $reverse > temp.sam;
+bwa mem -V -t $numberofcores $j $forward $reverse > $name.temp.sam;
 fi
 
 if [ $sequencing == single ]
 then
-bwa mem -V -t $numberofcores $j $forward > temp.sam;
+bwa mem -V -t $numberofcores $j $forward > $name.temp.sam;
 fi
 
 # Convert temp.sam to temp.bam, outputting only reads that have mapping quality
-samtools view -@ $numberofcores -b -F 5 -T $j temp.sam > temp.bam
+samtools view -@ $numberofcores -b -F 5 -T $j $name.temp.sam > $name.temp.bam
 # Sorting bam and indexing resulting file
-samtools sort -@ $numberofcores temp.bam > tempsorted.bam
-samtools index -@ $numberofcores tempsorted.bam
+samtools sort -@ $numberofcores $name.temp.bam > $name.tempsorted.bam
+samtools index -@ $numberofcores $name.tempsorted.bam
 # Printing out pileup
-samtools mpileup -f $j tempsorted.bam > $name.pileup
-rm temp*
+samtools mpileup -f $j $name.tempsorted.bam > $name.pileup
+rm $name.temp*
 
 # Generating the fasta files based on the pileup file
 Rscript filtering_fasta_on_pileup.R
-rm *.pileup
+rm $name.pileup
 
 # Aligning the sequences in the output file
 nolines=`wc -l ${name}_pileup.fasta | awk '{print $1}'`
@@ -58,7 +60,7 @@ echo ">"$locusname >> $name.reference.fa
 tail -n+2 ${name}_pileup.fasta >> $name.reference.fa
 fi
 
-rm *.fasta
+rm ${name}_pileup.fasta
 
 done
 

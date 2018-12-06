@@ -88,6 +88,43 @@ fi
 ```
 
 ### 2. Using your locus specific fasta files as references to pull down the specific sequence for each sample
+
+You will need to set up a 'phasing_settings' file. On each separate line, in this order, you will need:
+
+Line 1: path to your up-to-data jdk/bin/java. If your default 'java' command is pointing to the right version, you can just put in java on this line (I have had trouble with $JAVA_HOME on systems where the native shell is not bash)
+
+Line 2: path to folder containing the gatk executable
+
+Line 3: path to picard
+
+Line 4: paired or single, depending on your sequencing method
+
+Line 5: the pathway to your 'cleaned' F reads (or just your cleaned reads if single end). "${name}" should be used as a placeholder for the actual sample name wherever this occurs in the pathway to the reads (as the actual ${name} will be inserted by the script based on samples.txt. This program expects the path to the reads to be standard across your samples, so you will need to rename them if this is not the case
+
+Line 6: the same thing for your 'cleaned' R reads if you have paired sequence data (blank if you don't)
+
+Line 7: the path to GATK3.8/GenomeAnalysisTK.jar (unfortunately not all tools needed were ported to GATK v4)
+
+Line 8: the number of threads you'd like bwa to use
+
+e.g.
+```
+/nfs1/FW_HMSC/Baker_Lab/bin/jdk1.8.0_72/bin/java
+/nfs1/FW_HMSC/Baker_Lab/bin/gatk_folder
+/nfs1/FW_HMSC/Baker_Lab/bin/picard/dist/picard.jar
+paired
+/nfs1/FW_HMSC/Baker_Lab/emma_temp/ddRAD_for_Alana/QC_Phred20_discardN/${name}.1.fq.gz
+/nfs1/FW_HMSC/Baker_Lab/emma_temp/ddRAD_for_Alana/QC_Phred20_discardN/${name}.2.fq.gz
+/nfs1/FW_HMSC/Baker_Lab/bin/GenomeAnalysisTK.jar
+4
+```
+Another example of the pathway to the reads where these are in a folder with the name of the sample:
+```
+/home/a499a400/Kaloula/cleaned-reads/${name}/split-adapter-quality-trimmed/${name}-READ1.fastq.gz
+/home/a499a400/Kaloula/cleaned-reads/${name}/split-adapter-quality-trimmed/${name}-READ2.fastq.gz
+```
+
+
 -- allow for multiple mapping and then use the consensus to pull down the final locus
 
 

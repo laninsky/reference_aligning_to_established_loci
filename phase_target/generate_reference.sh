@@ -39,7 +39,7 @@ $javapath -jar $picard SamFormatConverter I=tempsortmarked.sam O=tempsortmarked.
 rm -rf *.sam
 rm temp.metrics
 samtools index -@ $numberofcores tempsortmarked.bam
-samtools mpileup tempsortmarked.bam > $name.pileup
+samtools mpileup -f $j tempsortmarked.bam > $name.pileup
 
 
 

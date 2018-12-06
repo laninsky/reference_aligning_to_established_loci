@@ -25,12 +25,12 @@ if [ $sequencing == paired ]
 then
 reverse_proto=`tail -n+6 phasing_settings | head -n1`;
 reverse=`eval "echo $reverse_proto"`;
-bwa mem -t $numberofcores $j $forward $reverse > temp.sam;
+bwa mem -V -t $numberofcores $j $forward $reverse > temp.sam;
 fi
 
 if [ $sequencing == single ]
 then
-bwa mem -t $numberofcores $j $forward > temp.sam;
+bwa mem -V -t $numberofcores $j $forward > temp.sam;
 fi
 
 $javapath -jar $picard AddOrReplaceReadGroups I=temp.sam O=tempsort.sam SORT_ORDER=coordinate LB=rglib PL=illumina PU=phase SM=everyone

@@ -50,20 +50,3 @@ do bysample "$i" & done
 # Generating the fasta files based on the pileup file
 Rscript filtering_fasta_on_pileup.R
 rm $name.pileup
-
-
-
-# Aligning the sequences in the output file
-nolines=`wc -l ${name}_pileup.fasta | awk '{print $1}'`
-if [ "$nolines" -gt "2" ]
-then
-echo $i
-mafft --thread $numberofcores ${name}_pileup.fasta > ${name}_pileup_aligned.fasta
-break 2
-else
-locusname=`echo $j | sed 's"fasta_files/""g' | sed 's/\.fasta//g'`
-echo ">"$locusname >> $name.reference.fa
-tail -n+2 ${name}_pileup.fasta >> $name.reference.fa
-fi
-
-rm ${name}_pileup.fasta

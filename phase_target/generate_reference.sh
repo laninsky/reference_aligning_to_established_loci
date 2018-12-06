@@ -46,6 +46,7 @@ rm $name.temp*
 # for-loop allowing bysample to be parallelized
 for i in `seq 1 $nosamples`;
 do bysample "$i" & done
+wait
 
 # Generating the fasta files based on the pileup file
 Rscript filtering_fasta_on_pileup.R

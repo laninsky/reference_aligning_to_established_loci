@@ -3,7 +3,7 @@
 You'll have a fasta file with the target loci that you are interested in pulling down from your sample. This might be a file that doesn't have multiple taxa (i.e. each target locus is present just once), or it may have multiple taxa per locus. This first little script is going to split out the fasta file into locus specific files.
 
 ### 1. Getting your locus-specific fasta files together
-First, define your file name
+First, define your file name (the code in this repository assumes you are working out of the folder where your fasta file lives)
 ```
 fastafilename=target_Zhang_et_al.fa
 ```
@@ -88,7 +88,7 @@ fi
 ```
 
 ### 2. Using your locus specific fasta files as references to pull down the specific sequence for each sample
-Stuff that needs to be installed: Java, GATK v4.0, GATK v3.8, picard (paths to these will be defined below). Also on your path you'll need bwa, samtools, and R. You will then need to set up a 'phasing_settings' file. On each separate line, in this order, you will need:
+Stuff that needs to be installed: Java, GATK v4.0, GATK v3.8, picard (paths to these will be defined below). Also on your path you'll need bwa, samtools, and R. You will then need to set up a 'phasing_settings' file, a samples.txt file (both described below), and have the associated Rscripts in this repository in your working directory as well. On each separate line, in this order, you will need:
 
 Line 1: path to your up-to-data jdk/bin/java. If your default 'java' command is pointing to the right version, you can just put in java on this line (I have had trouble with $JAVA_HOME on systems where the native shell is not bash)
 

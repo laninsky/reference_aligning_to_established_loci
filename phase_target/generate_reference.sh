@@ -5,11 +5,12 @@ sequencing=`tail -n+4 phasing_settings | head -n1`;
 gatk38=`tail -n+7 phasing_settings | head -n1`
 numberofcores=`tail -n+8 phasing_settings | head -n1`;
 
-sed -i 's/\?/N/g' reference.fa;
-sed -i 's/-//g' reference.fa;
-bwa index -a is reference.fa;
-samtools faidx reference.fa;
-$javapath -jar $picard CreateSequenceDictionary R=reference.fa O=reference.dict;
+for j in fasta_files/*;
+do sed -i 's/\?/N/g' $j;
+sed -i 's/-//g' $j;
+bwa index -a is $j;
+samtools faidx $j;
+$javapath -jar $picard CreateSequenceDictionary R=$j O=$j.dict;
 
 nosamples=`wc -l samples.txt | awk '{print $1}'`;
 
@@ -24,12 +25,12 @@ if [ $sequencing == paired ]
 then
 reverse_proto=`tail -n+6 phasing_settings | head -n1`;
 reverse=`eval "echo $reverse_proto"`;
-bwa mem -t $numberofcores reference.fa $forward $reverse > temp.sam;
+bwa mem -t $numberofcores $j $forward $reverse > temp.sam;
 fi
 
 if [ $sequencing == single ]
 then
-bwa mem -t $numberofcores reference.fa $forward > temp.sam;
+bwa mem -t $numberofcores $j $forward > temp.sam;
 fi
 
 $javapath -jar $picard AddOrReplaceReadGroups I=temp.sam O=tempsort.sam SORT_ORDER=coordinate LB=rglib PL=illumina PU=phase SM=everyone;

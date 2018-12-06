@@ -23,6 +23,8 @@ Line 7: the path to GATK3.8/GenomeAnalysisTK.jar (unfortunately not all tools ne
 
 Line 8: the number of threads you'd like to use PER SAMPLE (e.g. if you have 5 samples, and you select 4 threads, 5\*4 = 20 threads total)
 
+Line 9: the name of the fasta file with the reference loci you want to fish out.
+
 e.g.
 ```
 /nfs1/FW_HMSC/Baker_Lab/bin/jdk1.8.0_72/bin/java
@@ -33,6 +35,7 @@ paired
 /nfs1/FW_HMSC/Baker_Lab/emma_temp/ddRAD_for_Alana/QC_Phred20_discardN/${name}.2.fq.gz
 /nfs1/FW_HMSC/Baker_Lab/bin/GenomeAnalysisTK.jar
 4
+target_Zhang_et_al.fa
 ```
 Another example of the pathway to the reads where these are in a folder with the name of the sample:
 ```
@@ -49,6 +52,7 @@ single
 
 /usr/local/GenomeAnalysisTK-3.8-0-ge9d806836/GenomeAnalysisTK.jar
 8
+target_Zhang_et_al.fa
 ```
 
 As well as your phasing_settings file, you'll need a file ("samples.txt") which lists the samples you are interested in assembling, one on each line. The names given here should match the ${name} given in phasing_settings e.g.

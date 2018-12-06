@@ -14,10 +14,9 @@ bwa index -a is $j;
 samtools faidx $j;
 $javapath -jar $picard CreateSequenceDictionary R=$j O=$j.dict;
 
-samplearray=( `seq 1 $nosamples` )
-
-for i in "${samplearray[@]}";
-do name=`tail -n+$i samples.txt | head -n1`;
+# going to run samples in parallel by defining function bysample below
+bysample () {
+name=`tail -n+$i samples.txt | head -n1`;
 forward_proto=`tail -n+5 phasing_settings | head -n1`;
 forward=`eval "echo $forward_proto"`;
 
@@ -61,8 +60,10 @@ tail -n+2 ${name}_pileup.fasta >> $name.reference.fa
 fi
 
 rm ${name}_pileup.fasta
+}
+
+# for-loop allowing bysample to be parallelized
+for i in `seq 1 $nosamples`;
+do bysample "$i" & done
 
 done
-
-done
-

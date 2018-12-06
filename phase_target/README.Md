@@ -88,8 +88,7 @@ fi
 ```
 
 ### 2. Using your locus specific fasta files as references to pull down the specific sequence for each sample
-
-You will need to set up a 'phasing_settings' file. On each separate line, in this order, you will need:
+Stuff that needs to be installed: Java, GATK v4.0, GATK v3.8, picard (paths to these will be defined below). Also on your path you'll need bwa, samtools, and R. You will then need to set up a 'phasing_settings' file. On each separate line, in this order, you will need:
 
 Line 1: path to your up-to-data jdk/bin/java. If your default 'java' command is pointing to the right version, you can just put in java on this line (I have had trouble with $JAVA_HOME on systems where the native shell is not bash)
 
@@ -123,16 +122,27 @@ Another example of the pathway to the reads where these are in a folder with the
 /home/a499a400/Kaloula/cleaned-reads/${name}/split-adapter-quality-trimmed/${name}-READ1.fastq.gz
 /home/a499a400/Kaloula/cleaned-reads/${name}/split-adapter-quality-trimmed/${name}-READ2.fastq.gz
 ```
+An example with single end sequencing:
+```
+/usr/bin/java
+/usr/local/gatk-4.0.2.1
+/nfs1/FW_HMSC/Baker_Lab/bin/picard/dist/picard.jar
+single
+/mnt/hcs-gemmell/beetles/reads/${name}-pe100-reads.fq.gz
+
+/usr/local/GenomeAnalysisTK-3.8-0-ge9d806836/GenomeAnalysisTK.jar
+8
+```
 
 As well as your phasing_settings file, you'll need a file ("samples.txt") which lists the samples you are interested in assembling, one on each line. The names given here should match the ${name} given in phasing_settings e.g.
 ```
-MQ23qc
-Eau09AI233qc
-Eau09AI164qc
-PV56sqc
-PV70mqc
-Eau09AI136qc
-PV50mqc
+amphizoa
+bemHap1
+chlSer1
+lioTuu1
+omoHam1
+pterMel1
+traGib1
 ```
 If you have paired end data, before you run the script for this step, make sure that your F and R files have the same read names in both (i.e. you cannot have a suffix of _1 in the read1 file, and _2 in the read2 file). If they have different names in each file, use sed to rename them e.g.
 ```

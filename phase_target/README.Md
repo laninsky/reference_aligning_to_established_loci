@@ -126,7 +126,7 @@ An example with single end sequencing:
 ```
 /usr/bin/java
 /usr/local/gatk-4.0.2.1
-/nfs1/FW_HMSC/Baker_Lab/bin/picard/dist/picard.jar
+/usr/local/picard-tools-2.18.0/picard.jar
 single
 /mnt/hcs-gemmell/beetles/reads/${name}-pe100-reads.fq.gz
 

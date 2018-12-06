@@ -41,15 +41,15 @@ samtools index -@ $numberofcores $name.tempsorted.bam
 samtools mpileup -f $reference $name.tempsorted.bam > $name.pileup
 rm $name.temp*
 
-# Generating the fasta files based on the pileup file
-Rscript filtering_fasta_on_pileup.R
-rm $name.pileup
-
 }
 
 # for-loop allowing bysample to be parallelized
 for i in `seq 1 $nosamples`;
 do bysample "$i" & done
+
+# Generating the fasta files based on the pileup file
+Rscript filtering_fasta_on_pileup.R
+rm $name.pileup
 
 
 

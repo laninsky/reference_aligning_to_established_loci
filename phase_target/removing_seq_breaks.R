@@ -2,7 +2,8 @@ fasta_files <- list.files(pattern=".fasta$")
 
 for (i in fasta_files) {
   temp <- read.table(i,stringsAsFactors=FALSE)
-  names <- temp[(seq(1,dim(temp)[1],2)),1]
+  names <- temp[(seq(1,dim(temp)[1],2)),1]  
+  names <- gsub(paste(">",i,sep=""),">",names)
   tweaknames <-  unlist(lapply(1:length(names),function(x) {
   procname <- unlist(strsplit(names[x],"_"))
   procname <- paste(procname[-(length(procname))],collapse="_")
@@ -23,6 +24,6 @@ for (i in fasta_files) {
       output <- rbind(output,paste(temp[seqpost,1],collapse=""))
     }
   }
-  
+    
   write.table(output,i,quote=FALSE,row.name=FALSE,col.name=FALSE)
 }      

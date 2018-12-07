@@ -80,103 +80,22 @@ basecall <- function(j) {
 for (i in pileup_files) {
   temp <- fread(i, select = c(1:5),sep="\t")
   output_name <- paste(gsub(".pileup","_pileup.fasta",i,fixed=TRUE))
-  outputnameforseqname <- paste(gsub(".pileup","",i,fixed=TRUE))
-  tempseq <- NULL
-  x <- 1
-  temprec <- NULL 
-  for (j in 1:(dim(temp)[1])) {
-    print(paste("Up to ",j," for sample ",i,sep=""))
-    #1A what to do if coverage is above 0
-    if (temp[j,4] > 0) {
-      #2A what to do for the first row or last row
-      if (j == 1 | j == (dim(temp)[1])) {
-        # 20A what to do for the first row
-        if (j == 1) {
-          temptemp <- c(1,row_by_row_analysis(j))
+  
+  fragments <- unique(temp[,1])
+  
+  for (k in fragments) {
+    fragmentrows <- which(temp[,1]==k)
+    tempseq <- NULL
+    for (j in fragmentrows) {
+        if (temp[j,4] > 0) {
+          temptemp <- c(j,row_by_row_analysis(j))
           temprec <- matrix(temptemp,nrow=1)
           tempseq <- basecall(j)
-        # 20AB what to do for the last row  
-        } else {
-          # 200A if the last line in the file belongs with the rest of the contig
-          if (temp[j,1]==temp[(j-1),1] & temp[j,2]==(temp[(j-1),2]+1)) {
-            if (is.null(temprec)) {
-              temptemp <- c(1,row_by_row_analysis(j))            
-              temprec <- matrix(temptemp,nrow=1)
-            } else {
-              temptemp <- c((as.numeric(temprec[(dim(temprec)[1]),1])+1),row_by_row_analysis(j))    
-              temprec <- rbind(temprec,temptemp)
-            } 
-            tempseq <- basecall(j)
-          } #200B
-          # 2000A if tempseq is not null
-          if (!(is.null(tempseq))) {
-            # 201A if the resulting contig is more than 1 bp in length
-            if (nchar(tempseq)>=1) {
-              write.table(paste(">",outputnameforseqname,"_",temp[j,1],"split_",x,sep=""),output_name,append=TRUE,quote=FALSE,row.names=FALSE,col.names=FALSE)
-              write.table(tempseq,output_name,append=TRUE,quote=FALSE,row.names=FALSE,col.names=FALSE)
-            }  #201B
-          } # 2000B  
-        }  #20B
-      #2AB what to do for the rest of the rows when coverage is above 0
-      } else {
-        # 3A what to do when from same underlying reference fragment and coverage is above 0
-        if (temp[j,1]==temp[(j-1),1]) {
-          # 4A what to do when no sequence gap between rows and coverage is above 0
-          if (temp[j,2]==(temp[(j-1),2]+1)) {
-            if (is.null(temprec)) {
-              temptemp <- c(1,row_by_row_analysis(j))            
-              temprec <- matrix(temptemp,nrow=1)
-            } else {
-              temptemp <- c((as.numeric(temprec[(dim(temprec)[1]),1])+1),row_by_row_analysis(j))    
-              temprec <- rbind(temprec,temptemp)
-            }  
-            tempseq <- basecall(j)
-          # 4AB what to do if not sequential bases (start a new frag) and coverage is above 0 
-          } else {
-            # 2000A if tempseq is not null
-            if (!(is.null(tempseq))) {
-              if (nchar(tempseq)>=1) {
-                write.table(paste(">",outputnameforseqname,"_",temp[(j-1),1],"split_",x,sep=""),output_name,append=TRUE,quote=FALSE,row.names=FALSE,col.names=FALSE)
-                write.table(tempseq,output_name,append=TRUE,quote=FALSE,row.names=FALSE,col.names=FALSE)
-                x <- x+1
-              }
-            } #2000B
-            temptemp <- c(1,row_by_row_analysis(j))
-            temprec <- matrix(temptemp,nrow=1)
-            tempseq <- basecall(j)
-          } #4B
-        # 3AB what to do if from different underlying fragments and coverage is above 0  
-        } else {
-           # 2000A if tempseq is not null
-           if (!(is.null(tempseq))) {
-             if (nchar(tempseq)>=1) {
-                write.table(paste(">",outputnameforseqname,"_",temp[(j-1),1],"split_",x,sep=""),output_name,append=TRUE,quote=FALSE,row.names=FALSE,col.names=FALSE)
-                write.table(tempseq,output_name,append=TRUE,quote=FALSE,row.names=FALSE,col.names=FALSE)
-                }
-           } # 2000B
-           temptemp <- c(1,row_by_row_analysis(j))
-           temprec <- matrix(temptemp,nrow=1)
-           tempseq <- basecall(j)
-           x <- 1
-        } #3B
-      } #2B  
-    #1AB what to do if coverage is 0      
-    } else {
-      # 2000A if tempseq is not null
-      if (!(is.null(tempseq))) {
-         if (nchar(tempseq)>=1) {
-            write.table(paste(">",outputnameforseqname,"_",temp[(j-1),1],"split_",x,sep=""),output_name,append=TRUE,quote=FALSE,row.names=FALSE,col.names=FALSE)
-            write.table(tempseq,output_name,append=TRUE,quote=FALSE,row.names=FALSE,col.names=FALSE)
-            x <- x + 1
-         }
-      } #2000B  
-      tempseq <- NULL
-      temprec <- NULL
-      if (!(j == 1)) {
-        if (!(temp[j,1]==temp[(j-1),1])) {
-          x <- 1
-        }  
-      }  
-    } #1B 
-  } # end for loop through rows (j)  
-} # end for loop through files (i)         
+        }
+     }
+     if (!(is.null(tempseq))) {
+        write.table(paste(">",k,sep=""),output_name,append=TRUE,quote=FALSE,row.names=FALSE,col.names=FALSE)
+        write.table(tempseq,output_name,append=TRUE,quote=FALSE,row.names=FALSE,col.names=FALSE)
+     } 
+  }
+}  

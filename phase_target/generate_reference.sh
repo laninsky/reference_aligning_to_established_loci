@@ -1,8 +1,5 @@
 javapath=`tail -n+1 phasing_settings | head -n1`;
-gatk=`tail -n+2 phasing_settings | head -n1`;
-picard=`tail -n+3 phasing_settings | head -n1`;
 sequencing=`tail -n+4 phasing_settings | head -n1`;
-gatk38=`tail -n+7 phasing_settings | head -n1`
 numberofcores=`tail -n+8 phasing_settings | head -n1`;
 reference=`tail -n+9 phasing_settings | head -n1`;
 
@@ -12,7 +9,6 @@ sed -i 's/\?/N/g' $reference;
 sed -i 's/-//g' $reference;
 bwa index -a is $reference;
 samtools faidx $reference;
-$javapath -jar $picard CreateSequenceDictionary R=$reference O=$reference.dict;
 
 # going to run samples in parallel by defining function bysample below
 bysample () {

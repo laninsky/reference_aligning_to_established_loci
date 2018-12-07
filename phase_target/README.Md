@@ -2,7 +2,7 @@
 
 You'll have a fasta file with the target loci that you are interested in pulling down from your sample. This might be a file that doesn't have multiple taxa (i.e. each target locus is present just once), or it may have multiple taxa per locus. You'll also have a bunch of samples that you want to fish these loci out of.
 
-### 1. Using your locus specific fasta files as references to pull down the specific sequences for each sample
+### 1. Using sequences in locus specific fasta file as a reference for genomes of interest
 Stuff that needs to be installed: Java, GATK v4.0, GATK v3.8, picard (paths to these will be defined below). Also on your path you'll need bwa, samtools, mafft, and R. You will then need to set up a 'phasing_settings' file, a samples.txt file (both described below), and have the associated Rscripts in this repository in your working directory as well. 
 
 For phasing_settings, on each separate line, in this order, you will need:
@@ -80,95 +80,16 @@ To run this step, make sure you've installed all the programs, have created the 
 bash generate_reference.sh &> generate_reference.log
 ```
 
+You should now have a fasta file for each of your samples. In it the sequences will be named samplename_originaltargetsequencename
 
+### 2. Generating single consensus sequence for each locus for each sample if multiple samples were present for a given locus in original reference file
+Your original fasta file might have had multiple sequences per locus (e.g. a gene characterized across multiple individuals). In this case, we want to make a consensus sequence for each locus for each sample. If each locus was only present once 
 
-
-### 1. Getting your locus-specific fasta files together
- This first little script is going to split out the fasta file into locus specific files.
-
-First, define your file name (the code in this repository assumes you are working out of the folder where your fasta file lives)
-```
-fastafilename=target_Zhang_et_al.fa
-```
-These steps are the same regardless of whether your target fasta has the same locus more than once or not
-```
-nolines=`wc -l $allelefilename | awk '{print $1}'`
-mkdir fasta_files
-```
-For files where the target locus is present just once
-```
-headercontents=`tail -n+1 $allelefilename | head -n1`
-locus_name=`echo $headercontents | sed 's/>//g'`
-echo $headercontents >> fasta_files/$locus_name.fasta
-fasta_sequence=""
-
-for j in `seq 2 $nolines`;
-do linecontents=`tail -n+$j $allelefilename | head -n1`;
-if echo $linecontents | grep --quiet ">";
-then echo $fasta_sequence | awk '{print $1}' >> fasta_files/$locus_name.fasta;
-locus_name=`echo $linecontents | sed 's/>//g'`
-echo $linecontents >> fasta_files/$locus_name.fasta
-fasta_sequence=""
-else
-fasta_sequence="$fasta_sequence$linecontents"
-fi
-done;
-
-echo $fasta_sequence | awk '{print $1}' >> fasta_files/$locus_name.fasta
-```
-For files where the target locus is present more than once you'll need to define how the sequence header combines the 
-the sample name and the gene/locus name e.g. what delimits them, and what is the first field
-```
 delimiter="-"
 first_field="sample"
-# or alternatively first_field="locus"
 
-if [ $first_field = "sample" ]; then
+After generating this "final reference" for each sample, we'll use this as the reference to reference map back to once more in Step 3. 
 
-headercontents=`tail -n+1 $allelefilename | head -n1`
-locus_name=`echo $headercontents | sed 's/>//g' | sed -E "s/(.*)$delimiter(.*)/\2/g"`
-headercontents=`echo $headercontents | sed -E "s/(.*)$delimiter(.*)/\1/g"`
-echo $headercontents >> fasta_files/$locus_name.fasta
-fasta_sequence=""
-
-for j in `seq 2 $nolines`;
-do linecontents=`tail -n+$j $allelefilename | head -n1`;
-if echo $linecontents | grep --quiet ">";
-then echo $fasta_sequence | awk '{print $1}' >> fasta_files/$locus_name.fasta;
-locus_name=`echo $linecontents | sed 's/>//g' | sed -E "s/(.*)$delimiter(.*)/\2/g"`
-headercontents=`echo $linecontents | sed -E "s/(.*)$delimiter(.*)/\1/g"`
-echo $headercontents >> fasta_files/$locus_name.fasta
-fasta_sequence=""
-else
-fasta_sequence="$fasta_sequence$linecontents"
-fi
-done;
-
-echo $fasta_sequence | awk '{print $1}' >> fasta_files/$locus_name.fasta
-
-else
-
-headercontents=`tail -n+1 $allelefilename | head -n1`
-locus_name=`echo $headercontents | sed 's/>//g' | sed -E "s/(.*)$delimiter(.*)/\1/g"`
-headercontents=`echo $headercontents | sed -E "s/(.*)$delimiter(.*)/\2/g"`
-echo $headercontents >> fasta_files/$locus_name.fasta
-fasta_sequence=""
-
-for j in `seq 2 $nolines`;
-do linecontents=`tail -n+$j $allelefilename | head -n1`;
-if echo $linecontents | grep --quiet ">";
-then echo $fasta_sequence | awk '{print $1}' >> fasta_files/$locus_name.fasta;
-locus_name=`echo $linecontents | sed 's/>//g' | sed -E "s/(.*)$delimiter(.*)/\1/g"`
-headercontents=`echo $linecontents | sed -E "s/(.*)$delimiter(.*)/\2/g"`
-echo $headercontents >> fasta_files/$locus_name.fasta
-fasta_sequence=""
-else
-fasta_sequence="$fasta_sequence$linecontents"
-fi
-done;
-
-fi
-```
 
 
 

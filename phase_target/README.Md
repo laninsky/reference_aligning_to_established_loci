@@ -85,8 +85,25 @@ You should now have a fasta file for each of your samples. In it the sequences w
 ### 2. Generating single consensus sequence for each locus for each sample if multiple samples were present for a given locus in original reference file
 Your original fasta file might have had multiple sequences per locus (e.g. a gene characterized across multiple individuals). In this case, we want to make a consensus sequence for each locus for each sample. If each locus was only present once in the target fasta you can skip this step.
 
-delimiter="-"
-first_field="sample"
+You are going to need to tack on another couple of lines to your phasing_settings file so we can figure out how to parse out the sequences by locus. To do this, you are going to need to know how your locus names are delimited from the whole sequence title e.g. "Gene49" in the following dataset is represented four times in the original target file (by Carabus_sp, Omoglymmius_sp, Pheropsophus_sp, and Agabus_sp)
+```
+[1] "Up to Carabus_spGene49 for sample bemHap1.pileup"
+[1] "Up to Omoglymmius_spGene49 for sample bemHap1.pileup"
+[1] "Up to Pheropsophus_spGene49 for sample bemHap1.pileup"
+[1] "Up to Agabus_spGene49 for sample bemHap1.pileup"
+```
+
+The delimiter that would allow us to identify each of these sequence names as belonging to the same locus is "Gene", taking the second half of the string after it is split on this (e.g. 49).
+
+You could also have the locus identifier come first e.g. GeneA_species1, GeneA_species2, GeneA_species3. In this case "\_" would be the delimiter, and then we'd take the _first_ part of the string after it is split.
+
+One thing just to watch is that the previous scripts will have stripped out any "-" from the names of your sequences. It might be a good idea to check the sample-specific fastas before starting this step to make sure your delimiter is going to work. After you've sussed this out, in phasing_seetings:
+
+Line 10: The delimiter that will allow you to pull out the locus name e.g. Gene, _
+
+Line 11: After splitting on this, whether the locus identified is in the 'first' or 'second' part of the string e.g. first, second
+
+
 
 After generating this "final reference" for each sample, we'll use this as the reference to reference map back to once more in Step 3. 
 

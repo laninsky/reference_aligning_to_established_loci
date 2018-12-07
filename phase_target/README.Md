@@ -103,6 +103,21 @@ Line 10: The delimiter that will allow you to pull out the locus name e.g. Gene,
 
 Line 11: After splitting on this, whether the locus identified is in the 'first' or 'second' part of the string e.g. first, second
 
+phasing_settings now looks like something this:
+```
+/usr/bin/java
+/usr/local/gatk-4.0.2.1
+/usr/local/picard-tools-2.18.0/picard.jar
+single
+/mnt/hcs-gemmell/beetles/reads/${name}-pe100-reads.fq.gz
+
+/usr/local/GenomeAnalysisTK-3.8-0-ge9d806836/GenomeAnalysisTK.jar
+2
+target_Zhang_et_al.fa
+Gene
+second
+```
+
 
 
 After generating this "final reference" for each sample, we'll use this as the reference to reference map back to once more in Step 3. 

@@ -81,7 +81,7 @@ for (i in pileup_files) {
   temp <- fread(i, select = c(1:5),sep="\t")
   output_name <- paste(gsub(".pileup","_pileup.fasta",i,fixed=TRUE))
   
-  fragments <- unique(temp[,1])
+  fragments <- as.matrix(unique(temp[,1]))
   
   for (k in fragments) {
     fragmentrows <- which(temp[,1]==k)

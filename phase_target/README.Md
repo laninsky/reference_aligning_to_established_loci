@@ -119,6 +119,10 @@ second
 ```
 
 
+Maybe check out following for consensus sequences:
+http://www.jalview.org/help/html/features/commandline.html
+http://emboss.sourceforge.net/apps/
+
 
 After generating this "final reference" for each sample, we'll use this as the reference to reference map back to once more in Step 3. 
 

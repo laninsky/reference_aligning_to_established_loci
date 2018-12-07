@@ -2,8 +2,10 @@
 
 You'll have a fasta file with the target loci that you are interested in pulling down from your sample. This might be a file that doesn't have multiple taxa (i.e. each target locus is present just once), or it may have multiple taxa per locus. You'll also have a bunch of samples that you want to fish these loci out of.
 
+You'll need to know the paths to Java, GATK v4.0, GATK v3.8, and picard, and on your path you'll need bwa, samtools, mafft, R, and EMBOSS.
+
 ### 1. Using sequences in locus specific fasta file as a reference for genomes of interest
-Stuff that needs to be installed: Java, GATK v4.0, GATK v3.8, picard (paths to these will be defined below). Also on your path you'll need bwa, samtools, mafft, and R. You will then need to set up a 'phasing_settings' file, a samples.txt file (both described below), and have the associated Rscripts in this repository in your working directory as well. 
+For this step you'll need Java, bwa, samtools and R. If you know the path to the other programs then you might as well chuck them into your 'phasing_settings' file. In addition, you'll need a samples.txt file (both described below), and to have the associated Rscripts in this repository in your working directory as well. 
 
 For phasing_settings, on each separate line, in this order, you will need:
 
@@ -83,7 +85,7 @@ bash generate_reference.sh &> generate_reference.log
 You should now have a fasta file for each of your samples. In it the sequences will be named samplename_originaltargetsequencename
 
 ### 2. Generating single consensus sequence for each locus for each sample if multiple samples were present for a given locus in original reference file
-Your original fasta file might have had multiple sequences per locus (e.g. a gene characterized across multiple individuals). In this case, we want to make a consensus sequence for each locus for each sample. If each locus was only present once in the target fasta you can skip this step.
+Your original fasta file might have had multiple sequences per locus (e.g. a gene characterized across multiple individuals). In this case, we want to make a consensus sequence for each locus for each sample. If each locus was only present once in the target fasta you can skip this step. You'll need mafft and EMBOSS on your path for this step.
 
 You are going to need to tack on another couple of lines to your phasing_settings file so we can figure out how to parse out the sequences by locus. To do this, you are going to need to know how your locus names are delimited from the whole sequence title e.g. "Gene49" in the following dataset is represented four times in the original target file (by Carabus_sp, Omoglymmius_sp, Pheropsophus_sp, and Agabus_sp)
 ```
@@ -117,11 +119,11 @@ target_Zhang_et_al.fa
 Gene
 second
 ```
+To run this step, make sure you've installed all the programs, have created the phasing_settings and samples.txt files, and have copied the \*.sh and \*.R scripts to your working directory. Then to run:
+```
+bash condense_reference.sh &> condense_reference.log
+```
 
-
-Maybe check out following for consensus sequences:
-http://www.jalview.org/help/html/features/commandline.html
-http://emboss.sourceforge.net/apps/
 
 
 After generating this "final reference" for each sample, we'll use this as the reference to reference map back to once more in Step 3. 

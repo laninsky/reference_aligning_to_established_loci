@@ -1,6 +1,3 @@
-
-if (!require('data.table')) install.packages('data.table'); library('data.table')
-
 fasta_files <- list.files(pattern=".fasta$")
 
 for (i in fasta_files) {

@@ -84,6 +84,7 @@ for (i in pileup_files) {
   fragments <- as.matrix(unique(temp[,1]))
   
   for (k in fragments) {
+    print(paste("Up to ",k," for sample ",i,sep=""))
     fragmentrows <- which(temp[,1]==k)
     tempseq <- NULL
     for (j in fragmentrows) {

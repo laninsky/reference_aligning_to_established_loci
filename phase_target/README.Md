@@ -85,9 +85,9 @@ bash generate_reference.sh &> generate_reference.log
 You should now have a fasta file for each of your samples. In it the sequences will be named with the original target sequence names
 
 ### 2. Generating single consensus sequence for each locus for each sample if multiple samples were present for a given locus in original reference file
-Your original fasta file might have had multiple sequences per locus (e.g. a gene characterized across multiple individuals). In this case, we want to make a consensus sequence for each locus for each sample. If each locus was only present once in the target fasta you can skip this step. You'll need mafft and EMBOSS on your path for this step.
+Your original fasta file might have had multiple sequences per locus (e.g. a gene characterized across multiple individuals). In this case, we want to make a consensus sequence for each locus for each sample. If each locus was only present once in the target fasta you can skip this step (instead just copy youe pileup.fasta files to reference.fasta files e.g. mv amphizoa_pileup.fasta to amphizoa.reference.fasta). 
 
-You are going to need to tack on another couple of lines to your phasing_settings file so we can figure out how to parse out the sequences by locus. To do this, you are going to need to know how your locus names are delimited from the whole sequence title e.g. "Gene49" in the following dataset is represented four times in the original target file (by Carabus_sp, Omoglymmius_sp, Pheropsophus_sp, and Agabus_sp)
+You'll need mafft and EMBOSS on your path for this step. You are also going to need to tack on another couple of lines to your phasing_settings file so we can figure out how to parse out the sequences by locus. To do this, you are going to need to know how your locus names are delimited from the whole sequence title e.g. "Gene49" in the following dataset is represented four times in the original target file (by Carabus_sp, Omoglymmius_sp, Pheropsophus_sp, and Agabus_sp)
 ```
 [1] "Up to Carabus_spGene49 for sample bemHap1.pileup"
 [1] "Up to Omoglymmius_spGene49 for sample bemHap1.pileup"
@@ -124,10 +124,8 @@ To run this step, make sure you've installed all the programs, have created the 
 bash condense_reference.sh &> condense_reference.log
 ```
 
-
-
 After generating this "final reference" for each sample, we'll use this as the reference to reference map back to once more in Step 3. 
 
-
+### 3. Carrying out reference mapping against sample-specific references, and phasing each sample for each locus
 
 

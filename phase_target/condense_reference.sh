@@ -52,33 +52,35 @@ bysample () {
   fi
 
 # Aligning the sequences in the output file
-for j in ${name}/*.fasta;
-nolines=`wc -l $j | awk '{print $1}'`
-locusname=`echo $j | sed "s'$name/''g" | sed 's/\.fasta//g'`
-echo ">"$locusname >> $name.reference.fa
-if [ "$nolines" -gt "2" ]
-then
-mafft --thread $numberofcores $j > $j.aligned
-cons -sequence $j.aligned -outseq $j.temp -name $locusname -setcase 0
-alignedlines=`wc -l $j.temp | awk '{print $1}'`
-fasta_sequence=""
+  for j in ${name}/*.fasta;
+    do nolines=`wc -l $j | awk '{print $1}'`
+    locusname=`echo $j | sed "s'$name/''g" | sed 's/\.fasta//g'`
+    echo ">"$locusname >> $name.reference.fa
+    if [ "$nolines" -gt "2" ]
+      then
+      mafft --thread $numberofcores $j > $j.aligned
+      cons -sequence $j.aligned -outseq $j.temp -name $locusname -setcase 0
+      alignedlines=`wc -l $j.temp | awk '{print $1}'`
+      fasta_sequence=""
 
-for k in `seq 2 $alignedlines`;
-do linecontents=`tail -n+$k $j.temp  | head -n1`;
-fasta_sequence="$fasta_sequence$linecontents";
-done;
-echo $fasta_sequence >> $name.reference.fa
+      for k in `seq 2 $alignedlines`;
+        do linecontents=`tail -n+$k $j.temp  | head -n1`;
+        fasta_sequence="$fasta_sequence$linecontents";
+      done;
+      echo $fasta_sequence >> $name.reference.fa
 
-else
-tail -n+2 $j >> $name.reference.fa
-fi
-
-rm ${name}_pileup.fasta
-
+    else
+      tail -n+2 $j >> $name.reference.fa
+    fi
+  done
+  
+  rm ${name}_pileup.fasta
+  rm -rf ${name}
+  
 }
 
 # for-loop allowing bysample to be parallelized
 for i in `seq 1 $nosamples`;
-do bysample "$i" & done
+  do bysample "$i" & done
 wait
 

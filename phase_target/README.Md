@@ -82,7 +82,7 @@ To run this step, make sure you've installed all the programs, have created the 
 bash generate_reference.sh &> generate_reference.log
 ```
 
-You should now have a fasta file for each of your samples. In it the sequences will be named samplename_originaltargetsequencename
+You should now have a fasta file for each of your samples. In it the sequences will be named with the original target sequence names
 
 ### 2. Generating single consensus sequence for each locus for each sample if multiple samples were present for a given locus in original reference file
 Your original fasta file might have had multiple sequences per locus (e.g. a gene characterized across multiple individuals). In this case, we want to make a consensus sequence for each locus for each sample. If each locus was only present once in the target fasta you can skip this step. You'll need mafft and EMBOSS on your path for this step.

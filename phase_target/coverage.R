@@ -15,7 +15,7 @@ loci <- unique(input[,2])
 noloci <- length(loci)
 
 output <- matrix(NA,nrow=noloci,ncol=8)
-output[,1] <- name[1,1]
+output[,1] <- name
 output[,2] <- loci
 
 for (i in 1:noloci) {

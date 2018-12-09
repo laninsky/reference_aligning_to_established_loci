@@ -3,7 +3,7 @@ args = commandArgs(trailingOnly=TRUE)
 
 library(stringr)
 input <- as.matrix(read.table(args[1]))
-name <- args[2]
+name <- gsub(".temp.coverage","",args[1])
 
 input[,4] <- input [,3]
 for (i in 1:(dim(input)[1])) {

@@ -80,6 +80,6 @@ for (j in (seq(1,(dim(to_write)[1]),2))) {
   to_write_final <- to_write
 }
 
-write.table(to_write_final, paste(name,".1.reference.fa",quote=FALSE, col.names=FALSE,row.names=FALSE)
+write.table(to_write_final, paste(name,".1.reference.fa",sep=""),quote=FALSE, col.names=FALSE,row.names=FALSE)
 
 q()

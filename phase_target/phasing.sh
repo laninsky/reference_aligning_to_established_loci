@@ -104,9 +104,14 @@ sed -i 's/\?/N/g' $name.2.reference.fa;
 sed -i 's/-//g' $name.2.reference.fa;
 }
 
-
+# for-loop allowing bysample to be parallelized
 for i in `seq 1 $nosamples`;
-do 
-done
+do bysample "$i" & done
 
+# feeding the per-sample coverage summary into the total table
+for i in `seq 1 $nosamples`;
+do name=`tail -n+$i samples.txt | head -n1`;
+cat $name.coverage_summary.txt >> coverage_summary.txt;
+rm $name.coverage_summary.txt;
+done
 

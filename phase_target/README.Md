@@ -138,7 +138,7 @@ bash phasing.sh &> phasing.log
 ```
 
 ### 4. Creating locus-specific fasta files for samples with data for those loci, aligned via mafft
-
+Pulling out the fasta for each locus for each sample:
 ```
 mkdir locus_specific_fasta
 for i in *.reference.fa;
@@ -160,9 +160,33 @@ for i in *.reference.fa;
       fi
     done;
  done;   
-
-
-
 ```
+Aligning samples for loci with 2+ samples present:
+```
+  for j in locus_specific_fasta/*.fasta;
+    do nolines=`wc -l $j | awk '{print $1}'`
+    if [ "$nolines" -gt "2" ]
+      then
+      mv $j $j.temp
+      mafft --thread $numberofcores $j.temp > $j.aligned
+      alignedlines=`wc -l $j.aligned | awk '{print $1}'`
+      fasta_sequence=""
+      linecontents=`tail -n+1 $j.aligned | head -n1`;
+      echo $linecontents >> $j
+      
+      for k in `seq 2 $alignedlines`;
+      do linecontents=`tail -n+$k $j.aligned | head -n1`;
+        if echo $linecontents | grep --quiet ">";
+          then echo $fasta_sequence | awk '{print $1}' >> $j;
+          echo $linecontents >> $j;
+          fasta_sequence="";
+        else
+          fasta_sequence="$fasta_sequence$linecontents";
+        fi
+      done;
+    fi
+  done
+```
+
 
 

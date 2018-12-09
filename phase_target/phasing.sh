@@ -109,6 +109,7 @@ sed -i 's/-//g' $name.1.reference.fa;
 # for-loop allowing bysample to be parallelized
 for i in `seq 1 $nosamples`;
 do bysample "$i" & done
+wait
 
 # feeding the per-sample coverage summary into the total table
 for i in `seq 1 $nosamples`;

@@ -86,6 +86,8 @@ $javapath -jar $picard AddOrReplaceReadGroups I=$name.tempsorteddups.bam O=$name
 
 samtools index -@ $numberofcores $name.tempsorteddupsrg.bam;
 
+mv $name.2.reference.fa.dict $name.2.reference.dict
+
 # Phasing
 $gatk/gatk HaplotypeCaller -R ${name}.2.reference.fa -I $name.tempsorteddupsrg.bam -stand-call-conf 30 -O $name.temp_raw_variants.vcf;
 
@@ -97,11 +99,11 @@ Rscript modref.R $name.temp_alt.fa
 
 mv $name.temp.reference.fa $name.1.reference.fa;
 rm -rf $name.temp*;
-rm -rf $name.reference.2.fa.*
-rm -rf $name.reference.2.fa.dict
+rm -rf $name.2.reference.fa.*
+rm -rf $name.2.reference.dict
 
-sed -i 's/\?/N/g' $name.2.reference.fa;
-sed -i 's/-//g' $name.2.reference.fa;
+sed -i 's/\?/N/g' $name.1.reference.fa;
+sed -i 's/-//g' $name.1.reference.fa;
 }
 
 # for-loop allowing bysample to be parallelized

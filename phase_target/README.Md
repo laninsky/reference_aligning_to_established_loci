@@ -128,4 +128,10 @@ After generating this "final reference" for each sample, we'll use this as the r
 
 ### 3. Carrying out reference mapping against sample-specific references, and phasing each sample for each locus
 
+Using the {name}.reference.fa files generated in the previous step, your phasing_settings and samples.txt files, and the R scripts in this repository, phasing.sh will use gatk v3.8, v4.0, bwa, samtools, and picard to generate phased alignments for each locus for each of your samples/
+
+Output will include a {name}.1.fa and {name}.2.fa file for each of the samples you listed in samples.txt (containing the first and second allele for each locus, respectively), and a file giving the coverage per sample for each locus ("coverage_summary.txt").
+
+
+
 

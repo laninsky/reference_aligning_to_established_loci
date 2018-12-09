@@ -187,6 +187,3 @@ Aligning samples for loci with 2+ samples present:
     fi
   done
 ```
-
-
-

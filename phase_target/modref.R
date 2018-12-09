@@ -1,5 +1,10 @@
+#!/usr/bin/env Rscript
+args = commandArgs(trailingOnly=TRUE)
+
 library(stringr)
-intable <- read.table("temp_alt.fa",header=FALSE,stringsAsFactors=FALSE,sep="\t")
+
+intable <- read.table(args[1],header=FALSE,stringsAsFactors=FALSE,sep="\t")
+name <- gsub(".temp_alt.fa","",args[1])
 
 # getting a list of the original locus names
 loci <- intable[(which(grepl(">",intable[,1])==TRUE)),1]
@@ -75,6 +80,6 @@ for (j in (seq(1,(dim(to_write)[1]),2))) {
   to_write_final <- to_write
 }
 
-write.table(to_write_final, "temp_alt2.fa",quote=FALSE, col.names=FALSE,row.names=FALSE)
+write.table(to_write_final, paste(name,".1.reference.fa",quote=FALSE, col.names=FALSE,row.names=FALSE)
 
 q()

@@ -36,7 +36,7 @@ fi
 samtools view -@ $numberofcores -b -F 5 -T ${name}.reference.fa $name.temp.sam > $name.temp.bam
 # Sorting bam and indexing resulting file
 samtools sort -@ $numberofcores $name.temp.bam > $name.tempsorted.bam
-$javapath -jar $picard MarkDuplicates MAX_FILE_HANDLES=1000 I=$name.tempsorted.bam O=$name.tempsorteddups.bam M=temp.metrics AS=TRUE;
+$javapath -jar $picard MarkDuplicates MAX_FILE_HANDLES=1000 I=$name.tempsorted.bam O=$name.tempsorteddups.bam M=$name.temp.metrics AS=TRUE;
 $javapath -jar $picard AddOrReplaceReadGroups I=$name.tempsorteddups.bam O=$name.tempsorteddupsrg.bam LB=rglib PL=illumina PU=phase SM=everyone;
 
 samtools index -@ $numberofcores $name.tempsorteddupsrg.bam;
@@ -55,10 +55,12 @@ $gatk/gatk HaplotypeCaller -R ${name}.reference.fa -I $name.tempsorteddupsrg.bam
 $javapath -jar $gatk38 -T FindCoveredIntervals -R ${name}.reference.fa -I $name.tempsorteddupsrg.bam -cov 1 -o $name.temp_covered.list;
 $javapath -jar $gatk38 -T FastaAlternateReferenceMaker -V $name.temp_raw_variants.vcf -R ${name}.reference.fa -L $name.temp_covered.list -o $name.temp_alt.fa;
 
-Rscript modref.R;
+Rscript modref.R $name.temp_alt.fa
 
-mv temp_alt2.fa $name.fa;
-rm -rf temp*;
+mv $name.temp.reference.fa $name.2.reference.fa;
+rm -rf $name.temp*;
+rm -rf $name.reference.fa.*
+rm -rf $name.reference.dict
 
 sed -i 's/\?/N/g' $name.fa;
 sed -i 's/-//g' $name.fa;
@@ -88,7 +90,7 @@ $gatk/gatk HaplotypeCaller -R $name.fa -I tempsortmarked.bam -stand-call-conf 30
 $javapath -jar $gatk38 -T FindCoveredIntervals -R $name.fa -I tempsortmarked.bam -cov 1 -o temp_covered.list;
 $javapath -jar $gatk38 -T FastaAlternateReferenceMaker -V temp_raw_variants.vcf -R $name.fa -o temp_alt.fa;
 
-Rscript modref.R;
+Rscript modref.R $name.temp_alt.fa
 
 mv $name.fa safe.$name.fa.ref.fa;
 rm -rf $name.*;

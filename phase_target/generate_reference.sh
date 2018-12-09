@@ -47,5 +47,3 @@ wait
 # Generating the fasta files based on the pileup file
 Rscript filtering_fasta_on_pileup.R
 rm $name.pileup
-
-Rscript removing_seq_breaks.R

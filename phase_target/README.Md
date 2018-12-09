@@ -137,5 +137,32 @@ To run this step, make sure you've installed all the programs, have created the 
 bash phasing.sh &> phasing.log
 ```
 
+### 4. Creating locus-specific fasta files for samples with data for those loci, aligned via mafft
+
+```
+mkdir locus_specific_fasta
+for i in *.reference.fa;
+  do name=`echo $i | sed 's/.reference.fa//g'`;
+  linecontents=`tail -n+1 $i | head -n1`;
+  locus_name=`echo $linecontents | sed 's/>//g'`
+  echo ">"$name >> locus_specific_fasta/$locus_name.fasta
+  nolines=`wc -l $i | awk '{print $1}'`
+
+  for j in `seq 2 $nolines`;
+    do linecontents=`tail -n+$j $i | head -n1`;
+      if echo $linecontents | grep --quiet ">";
+        then echo $fasta_sequence | awk '{print $1}' >> locus_specific_fasta/$locus_name.fasta;
+        locus_name=`echo $linecontents | sed 's/>//g'`
+        echo ">"$name  >> locus_specific_fasta/$locus_name.fasta
+        fasta_sequence=""
+      else
+        fasta_sequence="$fasta_sequence$linecontents"
+      fi
+    done;
+ done;   
+
+
+
+```
 
 

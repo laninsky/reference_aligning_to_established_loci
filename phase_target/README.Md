@@ -132,6 +132,10 @@ Using the {name}.reference.fa files generated in the previous step, your phasing
 
 Output will include a {name}.1.fa and {name}.2.fa file for each of the samples you listed in samples.txt (containing the first and second allele for each locus, respectively), and a file giving the coverage per sample for each locus ("coverage_summary.txt").
 
+To run this step, make sure you've installed all the programs, have created the phasing_settings and samples.txt files, and have copied the \*.sh and \*.R scripts to your working directory. Then to run:
+```
+bash phasing.sh &> phasing.log
+```
 
 
 

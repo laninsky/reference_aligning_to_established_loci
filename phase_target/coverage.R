@@ -31,6 +31,6 @@ output[i,8] <- as.numeric(output[i,7])*as.numeric(output[i,3])/as.numeric(output
 }
 }
 
-write.table(output, paste(name,"coverage_summary.txt",sep=""),quote=FALSE, col.names=FALSE,row.names=FALSE)
+write.table(output, paste(name,".coverage_summary.txt",sep=""),quote=FALSE, col.names=FALSE,row.names=FALSE)
 
 q()

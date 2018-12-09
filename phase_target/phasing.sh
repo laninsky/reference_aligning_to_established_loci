@@ -33,22 +33,27 @@ then
 bwa mem -t $numberofcores ${name}.reference.fa $forward > ${name}.temp.sam;
 fi
 
-$javapath -jar $picard AddOrReplaceReadGroups I=temp.sam O=tempsort.sam SORT_ORDER=coordinate LB=rglib PL=illumina PU=phase SM=everyone;
-$javapath -jar $picard MarkDuplicates MAX_FILE_HANDLES=1000 I=tempsort.sam O=tempsortmarked.sam M=temp.metrics AS=TRUE;
-$javapath -jar $picard SamFormatConverter I=tempsortmarked.sam O=tempsortmarked.bam;
-samtools index tempsortmarked.bam;
-# These tools were depreciated in gatk version 4
-#$gatk/gatk -T RealignerTargetCreator -R reference.fa -I tempsortmarked.bam -o tempintervals.list;
-#$gatk/gatk -T IndelRealigner -R reference.fa -I tempsortmarked.bam -targetIntervals tempintervals.list -o temp_realigned_reads.bam;
-$javapath -jar $gatk38 -T DepthOfCoverage -R reference.fa -I tempsortmarked.bam -o temp.coverage;
-rm -rf temp.coverage.sample_*;
-echo $name > name;
-Rscript coverage.R;
+samtools view -@ $numberofcores -b -F 5 -T ${name}.reference.fa $name.temp.sam > $name.temp.bam
+# Sorting bam and indexing resulting file
+samtools sort -@ $numberofcores $name.temp.bam > $name.tempsorted.bam
+$javapath -jar $picard MarkDuplicates MAX_FILE_HANDLES=1000 I=$name.tempsorted.bam O=$name.tempsorteddups.bam M=temp.metrics AS=TRUE;
+$javapath -jar $picard AddOrReplaceReadGroups I=$name.tempsorteddups.bam O=$name.tempsorteddupsrg.bam LB=rglib PL=illumina PU=phase SM=everyone;
 
-# The -stand_emit_conf 30 option is deprecated in GATK v 3.7 and was removed from this code on the 5-June-2017
-$gatk/gatk HaplotypeCaller -R reference.fa -I tempsortmarked.bam -stand-call-conf 30 -O temp_raw_variants.vcf;
-$javapath -jar $gatk38 -T FindCoveredIntervals -R reference.fa -I tempsortmarked.bam -cov 1 -o temp_covered.list;
-$javapath -jar $gatk38 -T FastaAlternateReferenceMaker -V temp_raw_variants.vcf  -R reference.fa -L temp_covered.list -o temp_alt.fa;
+samtools index -@ $numberofcores $name.tempsorteddupsrg.bam;
+
+# nt/nct option doesn't work for this one
+$javapath -jar $gatk38 -T DepthOfCoverage -R ${name}.reference.fa -I $name.tempsorteddupsrg.bam -o ${name}.temp.coverage;
+rm -rf ${name}.temp.coverage.sample_*;
+
+# Getting coverage for the sample
+Rscript coverage.R ${name}.temp.coverage
+
+# Phasing
+$gatk/gatk HaplotypeCaller -R ${name}.reference.fa -I $name.tempsorteddupsrg.bam -stand-call-conf 30 -O $name.temp_raw_variants.vcf;
+
+# nt/nct option doesn't work for these commands
+$javapath -jar $gatk38 -T FindCoveredIntervals -R ${name}.reference.fa -I $name.tempsorteddupsrg.bam -cov 1 -o $name.temp_covered.list;
+$javapath -jar $gatk38 -T FastaAlternateReferenceMaker -V $name.temp_raw_variants.vcf -R ${name}.reference.fa -L $name.temp_covered.list -o $name.temp_alt.fa;
 
 Rscript modref.R;
 

@@ -163,6 +163,7 @@ for i in *.reference.fa;
 ```
 Aligning samples for loci with 2+ samples present:
 ```
+numberofcores=`tail -n+8 phasing_settings | head -n1`;
   for j in locus_specific_fasta/*.fasta;
     do nolines=`wc -l $j | awk '{print $1}'`
     if [ "$nolines" -gt "2" ]

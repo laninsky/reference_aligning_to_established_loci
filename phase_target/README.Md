@@ -190,3 +190,12 @@ numberofcores=`tail -n+8 phasing_settings | head -n1`;
     fi
   done
 ```
+Getting rid of intermediate files
+```
+rm -rf locus_specific_fasta/*.temp
+rm -rf locus_specific_fasta/*.aligned
+for i in locus_specific_fasta/*;
+  do newname=`echo $i | sed 's/.final//g'`;
+  mv $i $newname;
+done  
+```

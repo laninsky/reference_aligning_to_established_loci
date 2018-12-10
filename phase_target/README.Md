@@ -159,6 +159,7 @@ for i in *.reference.fa;
         fasta_sequence="$fasta_sequence$linecontents"
       fi
     done;
+  echo $fasta_sequence | awk '{print $1}' >> locus_specific_fasta/$locus_name.fasta;
  done;   
 ```
 Aligning samples for loci with 2+ samples present:
@@ -183,8 +184,9 @@ numberofcores=`tail -n+8 phasing_settings | head -n1`;
               fasta_sequence="";
             else
           fasta_sequence="$fasta_sequence$linecontents";
-        fi
-      done;
+            fi
+        done;
+       echo $fasta_sequence | awk '{print $1}' >> $j.final;
     fi
   done
 ```

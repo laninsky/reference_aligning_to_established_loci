@@ -6,6 +6,7 @@ locusfield=`tail -n+11 phasing_settings | head -n1`;
 # going to run samples in parallel by defining function bysample below
 bysample () {
   name=`tail -n+$i samples.txt | head -n1`;
+  rm $name.pileup;
   mkdir $name
   nolines=`wc -l ${name}_pileup.fasta | awk '{print $1}'`
   headercontents=`tail -n+1 ${name}_pileup.fasta | head -n1`

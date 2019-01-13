@@ -1,3 +1,4 @@
+# phase_everyone v0.0
 The following instructions were originally designed for phasing samples and getting the coverage of UCEs from the phyluce pipeline. They are a little tweaked from the main instructions, but the coverage.R file and phasing_settings file should be the same as in the main instructions, and being familiar with the main instructions would be a good idea. These can be adapted to any source of loci as long as you have a separate fasta file for each locus, with each sample present a maximum of once (i.e. not broken down by alleles). If you are coming from pyRAD, you can use the scripts in helper_scripts to get your fasta files together from the *.loci file.
 
 1) After converting the incomplete UCE dataset (following gblocks etc etc) into fasta (separate file per locus, maximum one sequence per sample e.g. not phased alleles) using the convert formats tool from phyluce, get rid of line breaks in the fasta files with the onelining_firststep.R code within this repository (taken from https://github.com/laninsky/ambigoos_into_structure/blob/master/onelining.R). Note, this onelining code is different to that in the main folder.
@@ -47,3 +48,25 @@ Rscript summarize_coverage.R
 ```
 
 Follow any instructions for UCE-related points in the main scripts.
+
+### Programs/packages necessary for the pipeline:
+```
+stringr
+bwa
+samtools
+java
+picard
+gatk
+R
+```
+
+Along with the programs above, to cite this pipeline:
+```
+Alexander, A. 2018. phase_everyone v0.0. Avaiable from: https://github.com/laninsky/reference_aligning_to_established_loci/edit/master/phase_everyone
+
+Baca, S.M., Alexander, A., Gustafson, G.T. and Short, A.E., 2017. Ultraconserved elements show utility in phylogenetic inference of A dephaga (C oleoptera) and suggest paraphyly of ‘Hydradephaga’. Systematic Entomology, 42(4), pp.786-795.
+```
+
+### Version history
+0.0: Version used in Baca et al. (2017)
+

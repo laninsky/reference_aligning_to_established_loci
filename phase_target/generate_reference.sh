@@ -1,4 +1,3 @@
-javapath=`tail -n+1 phasing_settings | head -n1`;
 sequencing=`tail -n+4 phasing_settings | head -n1`;
 numberofcores=`tail -n+8 phasing_settings | head -n1`;
 reference=`tail -n+9 phasing_settings | head -n1`;

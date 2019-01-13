@@ -1,4 +1,4 @@
-# Phase_target
+# Phase_target v0.0
 
 You'll have a fasta file with the target loci that you are interested in pulling down from your sample. This might be a file that doesn't have multiple taxa (i.e. each target locus is present just once), or it may have multiple taxa per locus. You'll also have a bunch of samples that you want to fish these loci out of.
 
@@ -199,3 +199,24 @@ for i in locus_specific_fasta/*;
   mv $i $newname;
 done  
 ```
+
+### Programs/packages necessary for the pipeline:
+```
+MAFFT
+R
+stringr
+data.table
+bwa
+samtools
+java
+picard
+gatk
+```
+
+Along with the programs above, to cite this pipeline:
+```
+Alexander, A. 2018. Phase_target v0.0. Available from: https://github.com/laninsky/reference_aligning_to_established_loci/edit/master/phase_target
+```
+
+### Version history
+0.0: Version used in TBD

@@ -1,4 +1,4 @@
-# Reference_aligning_to_established_loci
+# Reference_aligning_to_established_loci v0.0.3
 
 Starting with the *.alleles file produced by ipyrad, (1) produces one fasta file per locus containing all the alleles present for each sample at that locus; (2) pulls one allele from each locus file for the species/samples you are interested in to act as a reference and stores these in a single fasta file; (3) carries out a reference-based alignment using bwa, gatk, samtools and picard using these reference loci; (4) generates a summary of the data and SNP files for downstream use using code similar to that found in: https://github.com/laninsky/pyRAD_alleles_into_structure; (5) combines these alleles for your new samples with the previous samples from step #2; (6) aligns the alleles for your new samples with your previous samples using MAFFT; (7) pulls out the SNPs from each locus for each of your fasta files; (8) filters these SNPs by lineages you require to be present/missing data to just one SNP per locus; and finally (9) (optional) further filters the SNPs for your reference-aligned samples to meet a minimum depth requirement.
 
@@ -313,9 +313,24 @@ Then run:
 Rscript completeness.R
 ```
 
-# Version history
+### Programs/packages necessary for the pipeline:
+```
+bwa, gatk, samtools and picard
+mafft
+java
+stringr
+R
+```
+Along with the programs above, to cite this pipeline:
+```
+Alexander, A. Reference_aligning_to_established_loci v0.03. Available from: https://github.com/laninsky/reference_aligning_to_established_loci
+
+Baca, S.M., Alexander, A., Gustafson, G.T. and Short, A.E., 2017. Ultraconserved elements show utility in phylogenetic inference of A dephaga (C oleoptera) and suggest paraphyly of ‘Hydradephaga’. Systematic Entomology, 42(4), pp.786-795.
+```
+
+### Version history
 v.0.0.3: Cleaning up some of the GATK v 4.0 code, and also tweaking modref.R which would have thrown weird errors if sequences had been broken into more than two bits.
 
 v0.0.2: GATK v 4.0 is a standalone executable rather than a *.jar file, so this was tweaked in the code on the 26-Mar-2018. The previous phase_everyone.sh files are available as phase_everyone_pre_v4_gatk.sh
 
-v0.0.1: The -stand_emit_conf 30 option is deprecated in GATK v 3.7 and was removed from this code on the 5-June-2017
+v0.0.1: The -stand_emit_conf 30 option is deprecated in GATK v 3.7 and was removed from this code on the 5-June-2017. This version used in Baca et al. (2017).

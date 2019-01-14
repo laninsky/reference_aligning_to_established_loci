@@ -202,15 +202,23 @@ done
 
 ### Programs/packages necessary for the pipeline:
 ```
-MAFFT
-R
-stringr
-data.table
-bwa
-samtools
+bwa: See citation info at: http://bio-bwa.sourceforge.net/bwa.shtml#13 and Li, H. "Toward better understanding of artifacts in variant calling from high-coverage samples." Bioinformatics (Oxford, England) 30, no. 20 (2014): 2843.
+
+data.table: M Dowle, A Srinivasan, T Short, S Lianoglou with contributions from R Saporta and E Antonyan (2015). data.table: Extension of Data.frame. R package version 1.9.6. http://CRAN.R-project.org/package=data.table (for up-to-date citation information run citation("data.table" in R)
+
+GATK: See citation info at https://www.broadinstitute.org/gatk/about/citing
+
 java
-picard
-gatk
+
+mafft: Katoh, K. and Standley, D.M., 2013. MAFFT multiple sequence alignment software version 7: improvements in performance and usability. Molecular biology and evolution, 30(4), pp.772-780.
+
+picard: http://broadinstitute.github.io/picard/
+
+R: R Core Team. 2015. R: A language and environment for statistical computing. URL http://www.R-project.org/. R Foundation for Statistical Computing, Vienna, Austria. https://www.r-project.org/
+
+samtools: See citation info at: http://www.htslib.org/doc/#manual-pages
+
+Stringr: Hadley Wickham (2012). stringr: Make it easier to work with strings.. R package version 0.6.2. http://CRAN.R-project.org/package=stringr (for up-to-date citation information run citation("stringr" in R)
 ```
 
 Along with the programs above, to cite this pipeline:

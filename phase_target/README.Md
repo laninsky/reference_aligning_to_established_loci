@@ -224,7 +224,9 @@ Stringr: Hadley Wickham (2012). stringr: Make it easier to work with strings.. R
 Along with the programs above, to cite this pipeline:
 ```
 Alexander, A. 2018. Phase_target v0.0. Available from: https://github.com/laninsky/reference_aligning_to_established_loci/edit/master/phase_target
+
+Gustafson, G.T., Alexander, A., Sproul, J.S., Pflug, J.M., Maddison, D.R. and Short, A.E., 2019. Ultraconserved element (UCE) probe set design: Base genome and initial design parameters critical for optimization. Ecology and Evolution.
 ```
 
 ### Version history
-0.0: Version used in TBD
+0.0: Version used in Gustafson et al. (2019)

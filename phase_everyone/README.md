@@ -1,4 +1,4 @@
-# phase_everyone v0.0
+# phase_everyone v0.1
 The following instructions were originally designed for phasing samples and getting the coverage of UCEs from the phyluce pipeline. They are a little tweaked from the main instructions, but the coverage.R file and phasing_settings file should be the same as in the main instructions, and being familiar with the main instructions would be a good idea. These can be adapted to any source of loci as long as you have a separate fasta file for each locus, with each sample present a maximum of once (i.e. not broken down by alleles). If you are coming from pyRAD, you can use the scripts in helper_scripts to get your fasta files together from the *.loci file.
 
 1) After converting the incomplete UCE dataset (following gblocks etc etc) into fasta (separate file per locus, maximum one sequence per sample e.g. not phased alleles) using the convert formats tool from phyluce, get rid of line breaks in the fasta files with the onelining_firststep.R code within this repository (taken from https://github.com/laninsky/ambigoos_into_structure/blob/master/onelining.R). Note, this onelining code is different to that in the main folder.
@@ -34,7 +34,7 @@ for i in `\ls`; do sed -i 's/ 2:/ 1:/g' $i/split-adapter-quality-trimmed/*READ2*
 for i in `\ls`; do gzip $i/split-adapter-quality-trimmed/*READ2*; done;
 ```
 
-4) Back in the main folder where your locus.fasta files used to be, and where you now have your subfolders consisting of each of your samples (each containing a reference.fa file): run the phase_everyone.sh script in this folder (make sure coverage.R from the main folder and modref.R from this folder are also in here, and phasing_settings etc has been set up as for the main instructions - note the comment about ${name} in the main instructions).
+4) Back in the main folder where your locus.fasta files used to be, and where you now have your subfolders consisting of each of your samples (each containing a reference.fa file): run the phase_everyone.sh script in this folder (make sure coverage.R from the main folder and modref.R and remove_missing_loci.R from this folder are also in here, and phasing_settings etc has been set up as for the main instructions - note the comment about ${name} in the main instructions).
 ```
 bash phasing_everyone.sh
 ```
@@ -75,6 +75,8 @@ Alexander, A. 2018. phase_everyone v0.0. Avaiable from: https://github.com/lanin
 Baca, S.M., Alexander, A., Gustafson, G.T. and Short, A.E., 2017. Ultraconserved elements show utility in phylogenetic inference of A dephaga (C oleoptera) and suggest paraphyly of ‘Hydradephaga’. Systematic Entomology, 42(4), pp.786-795.
 ```
 
-### Version history
+### Version history  
+0.1: Added remove_missing_loci.R for situations where gblocks had stripped a sequence for a sample back to only ambiguous/missing sites (would fail in the gatk steps otherwise)  
+
 0.0: Version used in Baca et al. (2017)
 

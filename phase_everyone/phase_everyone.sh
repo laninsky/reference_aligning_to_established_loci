@@ -11,7 +11,9 @@ echo "samplename" "locus" "ref_length(bp)" "bp_covered_by_seq" "min_cov" "max_co
 
 for i in `seq 1 $nosamples`;
 do name=`tail -n+$i samplenames.txt | head -n1`;
-cp $name/reference.fa ./;
+cp $name/reference.fa ./temp_ref;
+Rscript remove_missing_loci.R;
+rm temp_ref;
 sed -i 's/\?/N/g' reference.fa;
 sed -i 's/-//g' reference.fa;
 bwa index -a is reference.fa;
